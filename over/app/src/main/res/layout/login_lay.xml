@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/swipe_refresh_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:weightSum="1"
+        android:background="#a40ec5f2"
+        android:orientation="vertical">
+
+
+        <EditText
+            android:ellipsize="start"
+            android:gravity="center_horizontal"
+            android:paddingTop="15dp"
+            android:inputType="textCapWords|textPersonName"
+            android:singleLine="true"
+            android:layout_width="200dp"
+            android:layout_height="30dp"
+            android:id="@+id/editText"
+            android:background="#c6eaeb"
+            android:hint="username"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="80dp"
+
+            android:layout_row="4"
+            android:layout_column="0"
+             />
+
+
+            <EditText
+                android:layout_width="200dp"
+                android:layout_height="30dp"
+                android:id="@+id/editText2"
+
+                android:background="#c6eaeb"
+    android:layout_marginTop="10dp"
+                android:hint="password"
+                android:layout_below="@+id/editText"
+                android:ellipsize="start"
+
+                android:gravity="center_horizontal"
+
+                android:inputType="textCapWords|textPersonName"
+                android:singleLine="true"
+                android:layout_gravity="center"
+                android:layout_row="6"
+                android:layout_column="13"
+
+                android:layout_centerHorizontal="true" />
+
+
+        <Button
+            android:id="@+id/Login"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:text="login"
+            android:onClick="onClick"
+
+            android:layout_below="@+id/editText2"
+            android:layout_marginTop="10dp"
+
+            android:background="#72b6d5"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_row="41"
+            android:layout_column="11"
+
+            android:layout_centerHorizontal="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView"
+            android:layout_below="@+id/Login"
+            android:layout_marginTop="10dp"
+          android:layout_centerHorizontal="true"></ImageView>
+
+
+
+    </RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>
