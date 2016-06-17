@@ -294,7 +294,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
                 if(dataObject == null) return;
-                Intent i = new Intent(LauncherActivity.this, fetch_category.class);
+                Intent i = new Intent(LauncherActivity.this, imei_check.class);
 
                 startActivity(i);
 

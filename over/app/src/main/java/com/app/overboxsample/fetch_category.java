@@ -303,11 +303,18 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             public void onClick(View v) {
                 button.getShadowColor();
-                button.setBackgroundColor(255);
-                formisValid();
+                submitData();
+
+           //     formisValid();
+
                 Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
             }
         };
+    }
+
+    public void submitData()
+    {
+
     }
 
     public void formisValid()

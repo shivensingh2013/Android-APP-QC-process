@@ -205,9 +205,9 @@ public class AppProvider extends BaseProvider {
 
 
         Payload payload = new Payload();
-        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-        payload.add("command", "fetch_object");
-        payload.add("category_id","18");
+//        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
+//        payload.add("command", "fetch_object");
+//        payload.add("category_id","18");
 
 
         JSONObject json=new JSONObject();
@@ -250,7 +250,7 @@ public class AppProvider extends BaseProvider {
 
         //a;ternatie ay to create a request withjson object
 
-        String URL="http://192.168.32.153:8000/api/marketplace/imei";
+        String URL="http://dev.api.overboxd.com/api/marketplace/imei";
         JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,json,
                 new Response.Listener<JSONObject>() {
                     @Override

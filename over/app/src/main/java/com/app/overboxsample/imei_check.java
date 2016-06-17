@@ -95,32 +95,17 @@ public void imeiCheckFunc()
         @Override
         public void onSuccess(JSONObject dataObject) {
 
-//                    TextView a=(TextView) findViewById(R.id.error_print);
-//                    a.setText(" ");
             String val = null;
-
-            Log.d("no error", "jada");
-
-
-            if (String.valueOf(dataObject) == null) {
-
-
-                Intent j = new Intent(imei_check.this, fetch_category.class);
-
-                startActivity(j);
-            }
-            else
-            {
-              //  updateData();//dosplays and fills the form//deepak naege
-            }
-
+            Log.d("Mongo data",String.valueOf(dataObject));
+            Intent j = new Intent(imei_check.this, fetch_category.class);
+            startActivity(j);
 
         }
 
 
         @Override
         public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
-            Log.d("onerror", "jason");
+            Log.d("onerror", "Mongo");
             Toast.makeText(getApplicationContext(), "error no success", Toast.LENGTH_SHORT).show();
 
         }
