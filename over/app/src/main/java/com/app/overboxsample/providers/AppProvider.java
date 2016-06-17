@@ -1,6 +1,8 @@
 package com.app.overboxsample.providers;
 
+import android.text.Editable;
 import android.util.Log;
+import android.widget.EditText;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -201,20 +203,15 @@ public class AppProvider extends BaseProvider {
     }
 
 
-    public void fetch_Imei(JSONObject val,final IViewCallback<JSONObject> call){
-
-
-        Payload payload = new Payload();
-//        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-//        payload.add("command", "fetch_object");
-//        payload.add("category_id","18");
+    public void fetch_Imei(JSONObject val,EditText edt,final IViewCallback<JSONObject> call){
 
 
         JSONObject json=new JSONObject();
 
+        String imeiInput=String.valueOf(edt.getText());
 
         try {
-            json.put("imei","3");
+            json.put("imei",imeiInput);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -222,33 +219,6 @@ public class AppProvider extends BaseProvider {
 
         Log.d("fetch_imei",String.valueOf(json));
 
-        //created a request
-  //    Request request = RequestFactory.createRequest(HttpMethod.POST, "http://localhost:8000/api/marketplace/imei", null, payload, null, 60000, null, null);
-
-
-        //sending the request containing the url method and values
-
-
-//        JsonObjectRequest jsa=new JsonObjectRequest("http://localhost:8000/api/marketplace/imei",new Response.Listener<String>()
-//        {
-//            @Override
-//            public void onResponse(String response) {
-//                HttpResponse<String> httpResponse = new HttpResponse<>(
-//                        new HttpResponseStatus(),
-//                        response
-//                );
-//                Log.d("nitify2","it");
-//                notifyResponse(httpResponse, call);
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        });
-
-
-        //a;ternatie ay to create a request withjson object
 
         String URL="http://dev.api.overboxd.com/api/marketplace/imei";
         JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,json,
@@ -266,8 +236,12 @@ public class AppProvider extends BaseProvider {
             @Override
             public void onErrorResponse(VolleyError error) {
 
+                Log.d("Error","no response from volley");
 
                 VolleyLog.e("Error: ", error.getMessage());
+
+
+
             }
         });
 
@@ -281,6 +255,43 @@ public class AppProvider extends BaseProvider {
 
 
     }
+
+
+    public void submitData(JSONObject val,final IViewCallback<JSONObject> call)
+    {
+        Log.d("submission",String.valueOf(val));
+
+
+        String URL="http://dev.api.overboxd.com/api/marketplace/submit";
+
+        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,val,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        HttpResponse<JSONObject> httpResponse = new HttpResponse<>(new HttpResponseStatus(),response);
+                        notifyResponse(httpResponse, call);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+                Log.d("Error", "no response from volley");
+
+                VolleyLog.e("Error: ", error.getMessage());
+
+            }
+        });
+
+
+
+
+        VolleyQueueUtils.getGeneralRequestQueue().add(req);
+
+    }
+
+
+
 
 
 

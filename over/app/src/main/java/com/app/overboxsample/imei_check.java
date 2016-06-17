@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.providers.AppProvider;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -66,9 +67,6 @@ public class imei_check extends AppCompatActivity implements View.OnClickListene
 
         switch (view.getId()) {
             case R.id.button:
-
-                Toast.makeText(getApplicationContext(), "imei check starting", Toast.LENGTH_SHORT).show();
-
                 imeiCheckFunc();
                 break;
         }
@@ -89,24 +87,52 @@ public void imeiCheckFunc()
 
 
 
-    appProvider.fetch_Imei(a, new IViewCallback<JSONObject>() {
+    appProvider.fetch_Imei(a,imeival,new IViewCallback<JSONObject>() {
 
 
         @Override
         public void onSuccess(JSONObject dataObject) {
 
             String val = null;
-            Log.d("Mongo data",String.valueOf(dataObject));
-            Intent j = new Intent(imei_check.this, fetch_category.class);
-            startActivity(j);
+            Log.d("Mongo data", String.valueOf(dataObject));
+
+            try {
+
+                JSONArray value1=(JSONArray)dataObject.get("imeis");
+                Log.d("Mongo data",String.valueOf(value1));
+
+                if(String.valueOf(dataObject).contains("imei"))
+                {
+                    Log.d("mongo","reaching if condition");
+                    //showing the complete form printed in a different function
+
+                    Intent j = new Intent(imei_check.this, fetch_category.class);
+                    startActivity(j);
+                }
+
+                else
+
+                {
+                    Intent j = new Intent(imei_check.this, fetch_category.class);
+                    startActivity(j);
+
+
+                }
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
 
         @Override
         public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
-            Log.d("onerror", "Mongo");
-            Toast.makeText(getApplicationContext(), "error no success", Toast.LENGTH_SHORT).show();
+            Log.d("onerror", "value error in response imei not a jsonobject");
+
 
         }
 

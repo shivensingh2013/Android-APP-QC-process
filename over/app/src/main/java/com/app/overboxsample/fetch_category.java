@@ -307,13 +307,62 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 
            //     formisValid();
 
-                Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+
             }
         };
     }
 
     public void submitData()
     {
+
+        try {
+            final JSONObject formData=new JSONObject();
+
+
+
+            formData.put("imei", "default");
+
+
+            appProvider.submitData(formData, new IViewCallback<JSONObject>()
+            {
+                @Override
+                public void onSuccess(JSONObject dataObject) {
+
+                    try {
+                        Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+                        if(dataObject.has("data")) {
+
+                        dataObject.remove("data");
+                            dataObject.put("data",String.valueOf(formData));
+                        }
+
+
+
+                        Log.d("Submit",String.valueOf(dataObject));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+
+
+                    Log.d("Submit","error in submissionat fetchcategory ");
+
+
+
+                }
+            });
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
