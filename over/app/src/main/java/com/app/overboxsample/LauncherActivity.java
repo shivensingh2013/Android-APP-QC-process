@@ -33,7 +33,7 @@ import butterknife.InjectView;
 public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    @InjectView(R.id.label_categories) TextView categoriesJsonDump;//text view bindng here
+ //   @InjectView(R.id.label_categories) TextView categoriesJsonDump;//text view bindng here
    // @InjectView(R.id.label_category) TextView categoryJsonDump;
 //    @InjectView(R.id.btn_fetch_categories) Button fetchCategoriesButton;
 
@@ -110,17 +110,6 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
         //}
     }
-
-//    private void setRefreshing(final boolean isRefreshing) {
-//        swipeRefreshLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (swipeRefreshLayout == null) return;
-//                swipeRefreshLayout.setRefreshing(isRefreshing);
-//            }
-//        });
-//    }
-
 
 
     private List[] parseJson(JSONObject data) {
@@ -294,7 +283,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
                 if(dataObject == null) return;
-                Intent i = new Intent(LauncherActivity.this, imei_check.class);
+                Intent i = new Intent(LauncherActivity.this, option_imei.class);
 
                 startActivity(i);
 

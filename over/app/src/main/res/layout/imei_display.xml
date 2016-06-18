@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#a40ec5f2"
+    android:background="#fbdedfdf"
     android:weightSum="1">
 
 
@@ -18,11 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:id="@+id/editText"
-        android:background="#c6eaeb"
+        android:cursorVisible="true"
+
         android:hint="IMEI"
         android:layout_centerHorizontal="true"
-
-
         android:layout_row="4"
         android:layout_column="0"
         />
@@ -31,6 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
+        android:background="#fbc2c2c2"
         android:onClick="onClick"
         android:id="@+id/button"
         android:layout_gravity="center_horizontal" />

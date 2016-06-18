@@ -56,7 +56,7 @@ public class login extends AppCompatActivity implements View.OnClickListener{
        id_pass=(EditText) findViewById(R.id.editText2);
 
         appProvider = new AppProvider();
-        Toast.makeText(getApplicationContext(),"not ing",Toast.LENGTH_SHORT).show();
+
 
 
     }

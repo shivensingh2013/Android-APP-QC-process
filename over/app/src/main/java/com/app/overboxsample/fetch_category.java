@@ -2,10 +2,12 @@ package com.app.overboxsample;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -60,6 +62,7 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 
     AppProvider appProvider;
     ArrayAdapter<String> adapter1;
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,8 +98,15 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             final LinearLayout ll = new LinearLayout(this);
             TextView product = new TextView(this);
             product.setText(s + "    ");
-            product.setTextSize(15);
-            ll.addView(product);
+            product.setTextSize(20);
+
+          product.setPadding(0,10,0,10);
+           // product.setPadding(40,10,40,10);
+
+
+          //  product.setTextColor(65281);
+            product.setGravity(View.TEXT_ALIGNMENT_CENTER);
+            lm.addView(product);
 
             map.put(value,i);               //save the value and its corressponding ID
 
@@ -118,24 +128,29 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                 rb[1].setText("incomplete");
                 if(rg.getParent()!=null)
                     ((LinearLayout)rg.getParent()).removeView(rg);
-                ll.addView(rg);
+                rg.setPadding(40, 10, 40, 10);
+                lm.addView(rg);
 
             }
 
             else if(value.equals("text"))
             {
                 EditText edt = new EditText(this);
+                edt.setSingleLine();
+//                edt.getBackgroundTintMode();
+                edt.setPadding(70, 10, 70, 10);
 //                allEds.add(edt);
 //                edt.setId(ed_p);
 //                ed_p = ed_p +1;
-                ll.addView(edt);
+                lm.addView(edt);
             }
             else if(value.equals("date"))
             {
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 TextView date1 = new TextView(this);
                 date1.setText(date + "    ");
-                ll.addView(date1);
+                date1.setPadding(70, 10, 70, 10);
+                lm.addView(date1);
 
             }
             //if radio in value we have to make it a object
@@ -181,7 +196,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                        }
                    if(rg.getParent()!=null)
                        ((LinearLayout)rg.getParent()).removeView(rg);
-                       ll.addView(rg);
+                       rg.setPadding(70, 10, 70, 10);
+                       lm.addView(rg);
 
                    }
                 }
@@ -205,7 +221,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 //                        check.setText(key + "    ");
 //                       check.setId(ed_p);
                         ed_p = ed_p +1;
-                        ll.addView(check);
+                        check.setPadding(70, 10, 70, 10);
+                        lm.addView(check);
                     }
 
                 } catch (JSONException e) {
@@ -262,6 +279,7 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                                 auto.setDropDownWidth(500);
                                 if (auto.getParent() != null)
                                     ((LinearLayout) auto.getParent()).removeView(auto);
+                                auto.setPadding(70,10,70,10);
                                 ll.addView(auto);
                             } catch (JSONException e) {
                                 //   Log.d("error fetchval", "error");
@@ -285,7 +303,10 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                     {
                         EditText edt = new EditText(this);
                         allEds.add(edt);
-                        ll.addView(edt);
+                        edt.setSingleLine();
+
+                        edt.setPadding(70,10,70,10);
+                        lm.addView(edt);
                         edt.setId(ed_p);
                         ed_p = ed_p+1;
                     }
@@ -299,11 +320,23 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
     }
 
     View.OnClickListener handleOnClick(final Button button) {
+
+
         return new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             public void onClick(View v) {
+
                 button.getShadowColor();
+
+                button.setBackgroundColor(255);
+
+              //  button.getShadowColor();
+
+              //  button.scrollTo(View.FOCUS_DOWN,View.FOCUS_DOWN);
                 submitData();
+
+
+              //  I will start reviewing my data form similar to tat of update form and option for updating it and this will go in a loop
 
            //     formisValid();
 
@@ -317,12 +350,7 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 
         try {
             final JSONObject formData=new JSONObject();
-
-
-
             formData.put("imei", "default");
-
-
             appProvider.submitData(formData, new IViewCallback<JSONObject>()
             {
                 @Override
@@ -341,6 +369,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                         Log.d("Submit",String.valueOf(dataObject));
 
                     } catch (JSONException e) {
+                        Toast.makeText(getApplicationContext(),"Data Not Saved",Toast.LENGTH_SHORT).show();
+                        //reaches fetch category form again with errors
                         e.printStackTrace();
                     }
                 }

@@ -101,10 +101,10 @@ public void imeiCheckFunc()
                 JSONArray value1=(JSONArray)dataObject.get("imeis");
                 Log.d("Mongo data",String.valueOf(value1));
 
-                if(String.valueOf(dataObject).contains("imei"))
+                if(String.valueOf(dataObject).contains("null"))
                 {
-                    Log.d("mongo","reaching if condition");
-                    //showing the complete form printed in a different function
+                    Toast.makeText(getApplicationContext(), "reaching if condition", Toast.LENGTH_SHORT).show();
+
 
                     Intent j = new Intent(imei_check.this, fetch_category.class);
                     startActivity(j);
@@ -113,6 +113,8 @@ public void imeiCheckFunc()
                 else
 
                 {
+                    //use form show data here
+                    //showing the complete form printed in a different function
                     Intent j = new Intent(imei_check.this, fetch_category.class);
                     startActivity(j);
 
