@@ -158,29 +158,6 @@ public class AppProvider extends BaseProvider {
 
 
 
-//        Request request = RequestFactory.createRequest(
-//                HttpMethod.POST, "http://www.overboxd.com/index.php/generalqcapi", null, payload, null, 60000, null, null);
-//
-//        VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//
-//                    HttpResponse<JSONObject> httpResponse = new HttpResponse<>(
-//                            new HttpResponseStatus(),
-//                            new JSONObject(response)
-//                    );
-//
-//                    notifyResponse(httpResponse, callback);
-//                } catch (JSONException e) {
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }));
         Log.d("nitify1","it");
         Request request = RequestFactory.createRequest(
                 HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi", null, payload, null, 60000, null, null);
@@ -270,6 +247,13 @@ public class AppProvider extends BaseProvider {
         Log.d("submission",String.valueOf(val));
 
 
+        try {
+            String buf=(String)val.get("Imei");
+            val.remove("Imei");
+            val.put("imei",buf );
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         String URL="http://dev.api.overboxd.com/api/marketplace/submit";
 
         JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,val,
