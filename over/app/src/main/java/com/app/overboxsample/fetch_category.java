@@ -2,6 +2,7 @@ package com.app.overboxsample;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -41,21 +42,20 @@ public class fetch_category extends AppCompatActivity {
 
 
 
-   public static List lt;
-    int ed_p =0;
-    int radio_p =0;
+    public static List lt;
+    JSONObject jsonresult;
+    String date;
+    int id = 0;
+    int json_var = 0;
+    int auto_var = 0;   //used to map TextView with AutoTextComplete
+
     AutoCompleteTextView auto;
-    ListView list;
+
     LinearLayout lm;
 
-HashMap<String,Integer> map = new HashMap<String,Integer>();
-
-
-    List<EditText> allEds = new ArrayList<EditText>();
-
-    List<CheckBox> allchecks = new ArrayList<CheckBox>();
-
-    List<RadioGroup> allradio  = new ArrayList<RadioGroup>();
+    HashMap<Integer,String> map = new HashMap<Integer,String>();
+    HashMap<Integer,String> map_key = new HashMap<Integer,String>();
+    ArrayList map_autocomplete = new ArrayList();
 
 
     AppProvider appProvider;
@@ -66,21 +66,21 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 
 
         setContentView(R.layout.fetch_category);
-
+        jsonresult = new JSONObject();
         appProvider = new AppProvider();
 
         ButterKnife.inject(this);
 
-      //  categoryJsonDump = (TextView)findViewById(R.id.textView);
+        //  categoryJsonDump = (TextView)findViewById(R.id.textView);
 
-       List values =  LauncherActivity.object[0];
+        List values =  LauncherActivity.object[0];
         List keys =  LauncherActivity.object[1];
 
 
         // Creating a new RelativeLayout
 //        ScrollView scrollView = new ScrollView(this);
 
-         lm = (LinearLayout) findViewById(R.id.linearMain);
+        lm = (LinearLayout) findViewById(R.id.linearMain);
 
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -90,27 +90,45 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
         {
             String s = (String) keys.get(i);
             String value  = (String) values.get(i);
+            map_key.put(id,s);                        //store the keys with ID
 
             //create a dynamic layout
             final LinearLayout ll = new LinearLayout(this);
             TextView product = new TextView(this);
-            product.setText(s + "    ");
+            product.setId(id);
+
+            if(value.contains("autocomplete"))
+            {
+                Log.d("AUTO TEXT ID", String.valueOf(id));
+                Log.d("AUTO TEXT",s);
+                map_autocomplete.add(id);
+            }
+            id = id+1;
+            product.setText(s);
             product.setTextSize(15);
+            product.setTextColor(Color.parseColor("#000000"));
             ll.addView(product);
 
-            map.put(value,i);               //save the value and its corressponding ID
+            //save the value and its corressponding ID
 
             if(value.equals("flag"))
             {
-               //enter
+                map.put(id,value);
+
+                //enter
                 final  RadioButton[] rb = new RadioButton[2];
                 RadioGroup rg = new RadioGroup(this); //create the RadioGroup
                 //allradio.add(rg);
-//                rg.setId(radio_p);
+                rg.setId(id);
+                id =id+ 1;
 //                radio_p = radio_p +1;
                 rg.setOrientation(RadioGroup.VERTICAL);
                 rb[0]  = new RadioButton(this);
+                rb[0].setId(id);
+                id = id+1;
                 rb[1]  = new RadioButton(this);
+                rb[1].setId(id);
+                id = id+1;
                 rg.addView(rb[0]); //the RadioButtons are added to the radioGroup instead of the layout
 
                 rb[0].setText("complete");
@@ -124,71 +142,83 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 
             else if(value.equals("text"))
             {
+                map.put(id,value);
+
                 EditText edt = new EditText(this);
 //                allEds.add(edt);
-//                edt.setId(ed_p);
+                edt.setId(id);
+                id =id+ 1;
 //                ed_p = ed_p +1;
                 ll.addView(edt);
             }
             else if(value.equals("date"))
             {
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                map.put(id,value);
+
+                date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                 TextView date1 = new TextView(this);
+                id =id+ 1;
                 date1.setText(date + "    ");
+
                 ll.addView(date1);
 
             }
             //if radio in value we have to make it a object
             else if(value.contains("radio"))
-                {
+            {
+                map.put(id,"radio");
 
-                    JSONObject jsonObj = null;
-                    String r = null;
-                    try {
-                         jsonObj = new JSONObject(value);
-                         r = jsonObj.getString("radio");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    JSONArray array = null;
-                    try {
-                         array = new JSONArray(r);
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
-                   final  RadioButton[] rb = new RadioButton[array.length()];
-                    RadioGroup rg = new RadioGroup(this); //create the RadioGroup
-//                    allradio.add(rg);
-//                    rg.setId(ed_p);
-//                    ed_p = ed_p +1;
-                    rg.setOrientation(RadioGroup.VERTICAL);
-
-
-                   for(int j =0;j< array.length();j++ ) {
-//
-                      try {
-//
-                           rb[j]  = new RadioButton(this);
-                           rg.addView(rb[j]); //the RadioButtons are added to the radioGroup instead of the layout
-
-                          rb[j].setText(String.valueOf(array.get(j)) + "    ");
-
-                       } catch (JSONException e) {
-                           e.printStackTrace();
-                       }
-                   if(rg.getParent()!=null)
-                       ((LinearLayout)rg.getParent()).removeView(rg);
-                       ll.addView(rg);
-
-                   }
+                JSONObject jsonObj = null;
+                String r = null;
+                try {
+                    jsonObj = new JSONObject(value);
+                    r = jsonObj.getString("radio");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
+                JSONArray array = null;
+                try {
+                    array = new JSONArray(r);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final  RadioButton[] rb = new RadioButton[array.length()];
+                RadioGroup rg = new RadioGroup(this); //create the RadioGroup
+//                    allradio.add(rg);
+                rg.setId(id);
+                id =id+ 1;
+//                    ed_p = ed_p +1;
+                rg.setOrientation(RadioGroup.VERTICAL);
+
+
+                for(int j =0;j< array.length();j++ ) {
+//
+                    try {
+//
+                        rb[j]  = new RadioButton(this);
+                        rb[j].setId(id);
+                        id = id+1;
+                        rg.addView(rb[j]); //the RadioButtons are added to the radioGroup instead of the layout
+
+                        rb[j].setText(String.valueOf(array.get(j)) + "    ");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if(rg.getParent()!=null)
+                        ((LinearLayout)rg.getParent()).removeView(rg);
+                    ll.addView(rg);
+
+                }
+            }
 
             else if(value.contains("checkbox"))
             {
-
+                map.put(id,"checkbox");
+                id =id+ 1;
                 JSONObject jsonObj = null;
                 String r = null;
                 try
@@ -201,22 +231,18 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                     while (it.hasNext()) {
                         String key = it.next();
                         CheckBox check = new CheckBox(this);
-//                        allchecks.add(check);
-//                        check.setText(key + "    ");
-//                       check.setId(ed_p);
-                        ed_p = ed_p +1;
+
                         ll.addView(check);
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    }
+                }
 
 
             }
 
             else if(value.contains("autocomplete")) {
-
 
                 JSONObject obj = null;
                 try {
@@ -243,7 +269,10 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                                 a = new JSONArray(dataObject);
                                 //   List<String> start = new ArrayList<String>();
                                 //we are creating a temporary spinner named variable .After adding this to the ll layout the name of spinner is forgoteten and so can be used again.
+                                map.put(id,"autocomplete");
                                 auto = (AutoCompleteTextView) new AutoCompleteTextView(fetch_category.this);
+                                auto.setId(id);
+                                id = id+1;
                                 JSONObject jb = null;
                                 lt = new ArrayList();
                                 for (int j = 0; j < a.length(); j++) {
@@ -281,16 +310,19 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                 }
 
             }
-                    else
-                    {
-                        EditText edt = new EditText(this);
-                        allEds.add(edt);
-                        ll.addView(edt);
-                        edt.setId(ed_p);
-                        ed_p = ed_p+1;
-                    }
-                    lm.addView(ll);
-                }
+            else
+            {
+                map.put(id,"text");
+
+                EditText edt = new EditText(this);
+                edt.setId(id);
+                id =id+ 1;
+                ll.addView(edt);
+//
+//
+            }
+            lm.addView(ll);
+        }
 
         Button button = new Button(this);
         button.setText("Upload");
@@ -303,48 +335,245 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             public void onClick(View v) {
                 button.getShadowColor();
-                button.setBackgroundColor(255);
-                formisValid();
-                Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+                json_var =0;
+                Form_Submit();
+                //submitData();
+
+
+
             }
         };
     }
 
-    public void formisValid()
+    public void submitData()
     {
 
+        try {
+            final JSONObject formData=new JSONObject();
 
-        for (String key : map.keySet()) {
-            Log.d("Map Key Value", String.valueOf(map.get(key)));
+
+
+            formData.put("imei", "default");
+
+
+            appProvider.submitData(formData, new IViewCallback<JSONObject>()
+            {
+                @Override
+                public void onSuccess(JSONObject dataObject) {
+
+                    try {
+                        Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+                        if(dataObject.has("data")) {
+
+                            dataObject.remove("data");
+                            dataObject.put("data",String.valueOf(formData));
+                        }
+
+
+
+                        Log.d("Submit",String.valueOf(dataObject));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+
+
+                    Log.d("Submit","error in submissionat fetchcategory ");
+
+
+
+                }
+            });
+
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    public void Form_Submit()
+    {
+
+        for (int key : map.keySet()) {
+
+//            Log.d("Map Key",String.valueOf(key));
+//            Log.d("Map Key Value",(map.get(key)));
+
+            if((map.get(key)).equals("radio"))
+            {
+
+
+                RadioGroup radioButtonGroup = (RadioGroup)findViewById(key);
+                //     radioButtonGroup.setBackgroundResource(R.color.colorPrimary);
+                try {
+                    int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
+                    RadioButton rb = (RadioButton) findViewById(radioButtonID);
+                    String S = rb.getText().toString();
+
+
+                    //  Log.d("Radio Text", S);
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#000000"));
+                    try {
+
+                        jsonresult.put((tw.getText().toString()), S);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                catch(Exception e)
+                {
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var =1;
+
+                }
+
+            }
+
+            else if((map.get(key)).equals("text")) {
+                EditText edittext = (EditText)findViewById(key);
+                try
+                {
+                    String S = edittext.getText().toString();
+                    if(S.trim().length()==0)
+                    {
+                        TextView tw = (TextView)findViewById((key-1));
+                        tw.setTextColor(Color.parseColor("#ff0000"));
+                        json_var =1;
+
+                    }
+                    else
+                    {
+                        TextView tw = (TextView)findViewById((key-1));
+                        tw.setTextColor(Color.parseColor("#000000"));
+                        try {
+                            jsonresult.put((tw.getText().toString()), S);
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                    // Log.d("EditText", S);
+
+                }
+
+                catch (Exception e)
+                {
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var =1;
+
+                }
+            }
+
+
+            else if((map.get(key)).equals("flag")) {
+                RadioGroup radioButtonGroup = (RadioGroup)findViewById(key);
+                try
+                {
+                    int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
+                    RadioButton rb = (RadioButton) findViewById(radioButtonID);
+                    String S = rb.getText().toString();
+                    // Log.d("Radio Text", S);
+
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#000000"));
+                    try {
+                        jsonresult.put((tw.getText().toString()), S);
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+
+                catch (Exception e)
+                {
+
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var =1;
+                }
+            }
+
+//
+
+            else if((map.get(key)).equals("autocomplete")) {
+
+                int d = (int) map_autocomplete.get(auto_var);
+                //  Log.d("AUTO TEXT AGAIN", String.valueOf(d));
+                auto_var = auto_var+1;
+                if(map_autocomplete.size()==(auto_var))
+                {
+                    auto_var = 0;
+                }
+
+
+                try
+                {
+                    String S ="";
+                    AutoCompleteTextView auto = (AutoCompleteTextView)findViewById(key);
+                    S = auto.getText().toString();
+
+
+
+                    if(S.trim().length()==0)
+                    {
+
+                        TextView tw = (TextView)findViewById((d));
+                        tw.setTextColor(Color.parseColor("#ff0000"));
+
+                    }
+                    else
+                    {
+                        TextView tw = (TextView)findViewById((d));
+                        tw.setTextColor(Color.parseColor("#000000"));
+                        try {
+                            jsonresult.put((tw.getText().toString()), S);
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                    // Log.d("Autocomplete", s_1);
+
+                }
+
+                catch (Exception e)
+                {
+                    // Log.d("Error","error");
+                    TextView tw = (TextView)findViewById((key-1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var =1;
+
+                }
+            }
+
+
+        }
+        //Log.d("Json Result", String.valueOf(jsonresult));
+        if(jsonresult.length() !=0 && json_var==0) {
+            Log.d("Json Result", String.valueOf(jsonresult));
+            Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
 
         }
 
-//        String[] strings = new String[ed_p];
-//        for(int i=0; i < allEds.size(); i++){
-//        strings[i] = allEds.get(i).getText().toString();
-//        Log.d("Edit Text String", String.valueOf(strings[i]));
-//              }
-//
-//        for(int i=0; i < allradio.size(); i++)
-//        {
-//            int radioButtonID = (allradio.get(i)).getCheckedRadioButtonId();
-//            RadioButton radioButton = (RadioButton) findViewById(radioButtonID);
-//            try {
-//
-//
-//                    if (radioButton != null) {
-//                        Log.d("Radio Text String", String.valueOf(radioButton.getText()));
-//                    }
-//                }
-//                catch(Exception e)
-//                {
-//
-//                }
-//
-//        }
 
-
-        }
+    }
 
 
     @Override
