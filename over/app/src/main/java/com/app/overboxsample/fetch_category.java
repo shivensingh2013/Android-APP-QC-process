@@ -3,6 +3,7 @@ package com.app.overboxsample;
 import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -99,8 +100,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             TextView product = new TextView(this);
             product.setText(s + "    ");
             product.setTextSize(20);
-
-          product.setPadding(0,10,0,10);
+            product.setPadding(0, 10, 0, 10);
+            product.setTextColor(Color.parseColor("#0e6655"));
            // product.setPadding(40,10,40,10);
 
 
@@ -129,6 +130,7 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                 if(rg.getParent()!=null)
                     ((LinearLayout)rg.getParent()).removeView(rg);
                 rg.setPadding(40, 10, 40, 10);
+                rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
                 lm.addView(rg);
 
             }
@@ -136,9 +138,9 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             else if(value.equals("text"))
             {
                 EditText edt = new EditText(this);
-                edt.setSingleLine();
 //                edt.getBackgroundTintMode();
-                edt.setPadding(70, 10, 70, 10);
+                edt.setPadding(40, 10, 40, 10);
+                edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
 //                allEds.add(edt);
 //                edt.setId(ed_p);
 //                ed_p = ed_p +1;
@@ -147,9 +149,13 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
             else if(value.equals("date"))
             {
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
                 TextView date1 = new TextView(this);
                 date1.setText(date + "    ");
-                date1.setPadding(70, 10, 70, 10);
+                date1.setTextSize(20);
+                date1.setTextColor(Color.parseColor("#2980b9"));
+                date1.setPadding(40, 10, 40, 10);
+                date1.setBackgroundColor(Color.parseColor("#fbfcfc"));
                 lm.addView(date1);
 
             }
@@ -196,7 +202,9 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                        }
                    if(rg.getParent()!=null)
                        ((LinearLayout)rg.getParent()).removeView(rg);
-                       rg.setPadding(70, 10, 70, 10);
+                       rg.setPadding(40, 10, 40, 10);
+                       rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
+
                        lm.addView(rg);
 
                    }
@@ -221,7 +229,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
 //                        check.setText(key + "    ");
 //                       check.setId(ed_p);
                         ed_p = ed_p +1;
-                        check.setPadding(70, 10, 70, 10);
+                        check.setPadding(40, 10, 40, 10);
+                        check.setBackgroundColor(Color.parseColor("#fbfcfc"));
                         lm.addView(check);
                     }
 
@@ -279,7 +288,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                                 auto.setDropDownWidth(500);
                                 if (auto.getParent() != null)
                                     ((LinearLayout) auto.getParent()).removeView(auto);
-                                auto.setPadding(70,10,70,10);
+                                auto.setPadding(40,10,40,10);
+                                auto.setBackgroundColor(Color.parseColor("#fbfcfc"));
                                 ll.addView(auto);
                             } catch (JSONException e) {
                                 //   Log.d("error fetchval", "error");
@@ -304,8 +314,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                         EditText edt = new EditText(this);
                         allEds.add(edt);
                         edt.setSingleLine();
-
-                        edt.setPadding(70,10,70,10);
+                        edt.setPadding(40, 10, 40, 10);
+                        edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
                         lm.addView(edt);
                         edt.setId(ed_p);
                         ed_p = ed_p+1;

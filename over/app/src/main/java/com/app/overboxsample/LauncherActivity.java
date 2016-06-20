@@ -103,12 +103,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.btn_fetch_categories:
-             //   fetchCategories();
-                //break;
 
-        //}
     }
 
 
@@ -163,10 +158,6 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-
-
-
-
     private void fetchCategories() {
 
 
@@ -193,6 +184,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
                 adapter = new ArrayAdapter<String>(LauncherActivity.this,
                         android.R.layout.simple_list_item_1, android.R.id.text1, values);
+
 
 
 
@@ -234,21 +226,16 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
     private void fetchCategory(String categoryId) {
-//        setRefreshing(true);
 
         IViewCallback<String> io2=new IViewCallback<String>() {
             @Override
             public void onSuccess(String dataObject) {
 
-//                setRefreshing(false);
                 Gson gson = new GsonBuilder().setPrettyPrinting().create();
                 JsonParser jp = new JsonParser();
                 JsonElement je = jp.parse(dataObject.toString());
                 String prettyJsonString = gson.toJson(je);
                 Log.d("the category we chooose",prettyJsonString);
-
-
-
                 JSONObject jb = null;
 
                 try {
