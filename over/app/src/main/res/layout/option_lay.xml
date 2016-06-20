@@ -21,7 +21,12 @@
         android:textAllCaps="true"
         android:textSize="20dp"
         android:textColor="#0e6655"
-        android:background="#fbdedfdf"/>
+        android:background="#FFABAEAD"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        />
 
     <Button
         android:layout_width="fill_parent"
@@ -34,6 +39,10 @@
         android:textAllCaps="true"
         android:textSize="20dp"
         android:textColor="#0e6655"
-        android:background="#fbdedfdf"/>
+        android:background="#fbdedfdf"
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"/>
 
 </LinearLayout>

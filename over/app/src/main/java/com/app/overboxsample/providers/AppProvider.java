@@ -4,10 +4,12 @@ import android.text.Editable;
 import android.util.Log;
 import android.widget.EditText;
 
+import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.app.overboxsample.network.RequestFactory;
 import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.network.request.Payload;
@@ -221,7 +223,9 @@ public class AppProvider extends BaseProvider {
 
 
         String URL="http://dev.api.overboxd.com/api/marketplace/imei";
-        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,json,
+       // RequestQueue rq= Volley.newRequestQueue();
+        CustomPriorityRequest req = new CustomPriorityRequest
+                (com.android.volley.Request.Method.POST,URL,json,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -245,6 +249,10 @@ public class AppProvider extends BaseProvider {
             }
         });
 
+
+
+
+        req.setPriority(com.android.volley.Request.Priority.IMMEDIATE);
 
 
 

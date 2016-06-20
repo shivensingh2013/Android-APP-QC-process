@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -290,6 +291,8 @@ HashMap<String,Integer> map = new HashMap<String,Integer>();
                                     ((LinearLayout) auto.getParent()).removeView(auto);
                                 auto.setPadding(40,10,40,10);
                                 auto.setBackgroundColor(Color.parseColor("#fbfcfc"));
+                                auto.setWidth(lm.getWidth());
+
                                 ll.addView(auto);
                             } catch (JSONException e) {
                                 //   Log.d("error fetchval", "error");
