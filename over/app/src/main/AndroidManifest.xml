@@ -56,6 +56,11 @@
 
 
 
+        <activity android:name=".Display_form"
+            android:label="IMEI"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
 
         <activity
             android:name=".fetch_category"

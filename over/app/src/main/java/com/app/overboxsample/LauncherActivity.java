@@ -235,7 +235,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                 JsonParser jp = new JsonParser();
                 JsonElement je = jp.parse(dataObject.toString());
                 String prettyJsonString = gson.toJson(je);
-                Log.d("the category we chooose",prettyJsonString);
+               // Log.d("the category we chooose",prettyJsonString);
                 JSONObject jb = null;
 
                 try {

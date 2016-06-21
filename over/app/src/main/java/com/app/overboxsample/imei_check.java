@@ -25,7 +25,7 @@ import org.json.JSONObject;
 public class imei_check extends AppCompatActivity implements View.OnClickListener{
 
 
-
+public static  JSONObject jsonresult;
     AppProvider appProvider;
     EditText imeival;
 
@@ -94,7 +94,7 @@ public void imeiCheckFunc()
         public void onSuccess(JSONObject dataObject) {
 
             String val = null;
-            Log.d("Mongo data", String.valueOf(dataObject));
+          //  Log.d("Mongo data", String.valueOf(dataObject));
 
             try {
 
@@ -113,10 +113,15 @@ public void imeiCheckFunc()
                 else
 
                 {
-                    //use form show data here
-                    //showing the complete form printed in a different function
-                    Intent j = new Intent(imei_check.this, fetch_category.class);
-                    startActivity(j);
+                   jsonresult = dataObject;
+                    Toast.makeText(getApplicationContext(), "reaching else condition", Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(imei_check.this, Display_form.class);
+
+
+
+                    startActivity(intent);
+
 
 
                 }
