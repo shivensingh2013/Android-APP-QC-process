@@ -31,10 +31,9 @@ public class AppProvider extends BaseProvider {
     }
 
 
-//managing request for login
+    //managing request for login
     public void loginc( String id1, String id2, final IViewCallback<JSONObject> call)
-{
-    Log.d("payload run",id1);
+    {
     Payload payload = new Payload();
     payload.add("user_name",id1);
     payload.add("user_pass",id2);
@@ -42,10 +41,6 @@ public class AppProvider extends BaseProvider {
     Request request = RequestFactory.createRequest(
             HttpMethod.POST, "http://stage.overboxd.com/index.php/loginapi/", null, payload, null, 60000, null, null);
 
-    if(request==null)
-    {
-        Log.d("request not going","goo na");
-    }
     VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>() {
         @Override
         public void onResponse(String response) {
@@ -55,15 +50,10 @@ public class AppProvider extends BaseProvider {
                         new HttpResponseStatus(),
                         new JSONObject(response)
                 );
-
-
-
-
                 notifyResponse(httpResponse, call);
             }
 
             catch (JSONException e) {
-                //Toast.makeText(context,"Msg", Toast.LENGTH_LONG).show();
 
             }
         }
@@ -71,18 +61,17 @@ public class AppProvider extends BaseProvider {
         @Override
         public void onErrorResponse(VolleyError error) {
 
+
+
         }
     }));
 }
 
 
-    //managing request for fetching the category
+    //managing request for fetching Brand and colour
     public void fetchval(String url,final IViewCallback<String> call)
     {
         Payload payload = new Payload();
-//        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-//        payload.add("command", "fetch_categories");
-
         Request request = RequestFactory.createRequest(
                 HttpMethod.POST, url,null, payload, null, 60000, null, null);
 
@@ -99,8 +88,6 @@ public class AppProvider extends BaseProvider {
                     notifyResponse(httpResponse, call);
 
                 } catch (Exception e) {
-                    Log.d("Tag","fetchval mein prob");
-
 
                 }
             }
@@ -244,19 +231,18 @@ public class AppProvider extends BaseProvider {
 
     public void submitData(JSONObject val,final IViewCallback<JSONObject> call)
     {
-        Log.d("submission",String.valueOf(val));
+        try{
+        Log.d("submission", String.valueOf(val));
+        JSONObject result=val;
 
 
-        try {
-            String buf=(String)val.get("Imei");
-            val.remove("Imei");
-            val.put("imei",buf );
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            String buf=(String)result.get("Imei");
+            result.remove("Imei");
+            result.put("imei",buf );
+
         String URL="http://dev.api.overboxd.com/api/marketplace/submit";
 
-        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,val,
+        JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,result,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -279,6 +265,12 @@ public class AppProvider extends BaseProvider {
 
 
         VolleyQueueUtils.getGeneralRequestQueue().add(req);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
 
     }
 

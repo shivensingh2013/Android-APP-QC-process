@@ -41,7 +41,7 @@ public static  JSONObject jsonresult;
 
 
         appProvider = new AppProvider();
-        Toast.makeText(getApplicationContext(), "imei check starting", Toast.LENGTH_SHORT).show();
+
 
 
     }
@@ -104,7 +104,6 @@ public void imeiCheckFunc()
                 if(String.valueOf(dataObject).contains("null"))
                 {
                     Toast.makeText(getApplicationContext(), "reaching if condition", Toast.LENGTH_SHORT).show();
-
 
                     Intent j = new Intent(imei_check.this, fetch_category.class);
                     startActivity(j);

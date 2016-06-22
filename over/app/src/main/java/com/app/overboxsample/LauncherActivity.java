@@ -33,41 +33,23 @@ import butterknife.InjectView;
 public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
 
 
- //   @InjectView(R.id.label_categories) TextView categoriesJsonDump;//text view bindng here
-   // @InjectView(R.id.label_category) TextView categoryJsonDump;
-//    @InjectView(R.id.btn_fetch_categories) Button fetchCategoriesButton;
-
-
-   // @InjectView(R.id.btn_fetch_category_details) Button fetchCategoryButton;
-   // @InjectView(R.id.et_category_id) EditText etCategoryId;
     List category_id_array;
     public static List[] object;
-
     AppProvider appProvider;
-     ListView listview;
-   public  static  int  category_id;
+    ListView listview;
     ArrayAdapter<String> adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.content_launcher);
-
         appProvider = new AppProvider();
-
-        ButterKnife.inject(this);                                           //injects the
-
-
-         listview = (ListView) findViewById(R.id.listView);
+        ButterKnife.inject(this);
+        listview = (ListView) findViewById(R.id.listView);
         fetchCategories();
 
     }
-
-
-
-
 
     @Override
     protected void onStart() {
@@ -79,14 +61,12 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
     protected void onResume() {
         super.onResume();
 
-      //  fetchCategoriesButton.setOnClickListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-    //    fetchCategoriesButton.setOnClickListener(null);
     }
 
     @Override
@@ -106,7 +86,6 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
     private List[] parseJson(JSONObject data) {
 
         ArrayList<String> stringArrayList = new ArrayList<String>();//stores the string containing values of the object
@@ -118,7 +97,6 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
             Iterator<String> it = data.keys();
 
             while (it.hasNext()) {
-
 
                 String key = it.next();
                 try {
@@ -156,12 +134,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
         return new List[]{stringArrayList, stringKeyList};
     }
 
-
-
     private void fetchCategories() {
-
-
-
         //the fetch categories will call the function in app provider
         appProvider.fetchCategories(new IViewCallback<JSONObject>()
         {
@@ -178,15 +151,9 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
                 List[] obj = parseJson(dataObject);
                 List values = obj[0];
-
                 category_id_array = obj[1];
                 Log.d("list", String.valueOf(category_id_array));
-
-                adapter = new ArrayAdapter<String>(LauncherActivity.this,
-                        android.R.layout.simple_list_item_1, android.R.id.text1, values);
-
-
-
+                adapter = new ArrayAdapter<String>(LauncherActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
                 if (dataObject == null) return;
 
@@ -198,9 +165,6 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view,
                                             int position, long id) {
-
-                        // ListView Clicked item index
-                        int itemPosition = position;
 
                         fetchCategory((String) category_id_array.get(position));
 
@@ -219,15 +183,11 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-
-
-
-
-
-
     private void fetchCategory(String categoryId) {
 
         IViewCallback<String> io2=new IViewCallback<String>() {
+
+
             @Override
             public void onSuccess(String dataObject) {
 
@@ -235,14 +195,13 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                 JsonParser jp = new JsonParser();
                 JsonElement je = jp.parse(dataObject.toString());
                 String prettyJsonString = gson.toJson(je);
-               // Log.d("the category we chooose",prettyJsonString);
+
                 JSONObject jb = null;
 
                 try {
                     JSONArray array = new JSONArray(dataObject);
                     jb = (JSONObject)array.getJSONObject(0);
-                    Log.d("the phase1", String.valueOf(array));
-                    Log.d("the phase2", String.valueOf(jb));
+
                     //converts the data into a normal object now containing object itself
 
 
@@ -266,10 +225,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
                 object =   parseJson(jb1); //parses and print the value
 
-
-
-
                 if(dataObject == null) return;
+
                 Intent i = new Intent(LauncherActivity.this, option_imei.class);
 
                 startActivity(i);

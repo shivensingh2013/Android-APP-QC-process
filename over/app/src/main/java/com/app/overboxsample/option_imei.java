@@ -58,17 +58,15 @@ public class option_imei extends AppCompatActivity implements View.OnClickListen
                  i = new Intent(option_imei.this, fetch_category.class);
 
                 startActivity(i);
-
-
                 break;
+
+
             case R.id.OLD:
 
                 v.findViewById(R.id.OLD).setBackgroundColor(Color.parseColor("#fbc2c2c2"));
                  i = new Intent(option_imei.this, imei_check.class);
 
                 startActivity(i);
-
-
 
                 break;
 

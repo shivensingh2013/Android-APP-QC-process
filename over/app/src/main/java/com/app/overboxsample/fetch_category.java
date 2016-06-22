@@ -46,6 +46,7 @@ public class fetch_category extends AppCompatActivity {
 
 
    public static List lt;
+    public static List keys;
 
     ListView list;
 
@@ -85,7 +86,7 @@ public class fetch_category extends AppCompatActivity {
       //  categoryJsonDump = (TextView)findViewById(R.id.textView);
 
        List values =  LauncherActivity.object[0];
-        List keys =  LauncherActivity.object[1];
+         keys =  LauncherActivity.object[1];
 
 
         // Creating a new RelativeLayout
@@ -384,7 +385,7 @@ public class fetch_category extends AppCompatActivity {
                 button.setBackgroundColor(255);
                 json_var =0;
 
-JSONObject j= new JSONObject();
+                JSONObject j= new JSONObject();
                j =  Form_Submit();
                 Log.d("Json Final Submit", String.valueOf(j));
                 submitData(j);

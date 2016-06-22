@@ -2,6 +2,7 @@ package com.app.overboxsample;
 
 import android.annotation.TargetApi;
 import android.app.ActionBar.LayoutParams;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
@@ -418,13 +419,14 @@ public class Display_form extends AppCompatActivity {
             public void onClick(View v) {
 
                 button.getShadowColor();
-
                 button.setBackgroundColor(255);
                 json_var =0;
 
-                JSONObject j= new JSONObject();
+                JSONObject j;
                 j =  Form_Submit();
-                submitData(j);
+
+               submitData(j);
+
 
 
             }
