@@ -3,7 +3,8 @@
 
     android:id="@+id/swipe_refresh_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#fbdedfdf">
 
 
 
@@ -12,8 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:weightSum="1"
-        android:background="#a40ec5f2"
+        android:background="#e1e5e6"
         android:orientation="vertical">
 
 
@@ -24,9 +27,9 @@
             android:inputType="textCapWords|textPersonName"
             android:singleLine="true"
             android:layout_width="200dp"
-            android:layout_height="30dp"
+            android:layout_height="50dp"
             android:id="@+id/editText"
-            android:background="#c6eaeb"
+
             android:hint="username"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="80dp"
@@ -38,11 +41,11 @@
 
             <EditText
                 android:layout_width="200dp"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:id="@+id/editText2"
 
-                android:background="#c6eaeb"
-    android:layout_marginTop="10dp"
+
+                android:layout_marginTop="10dp"
                 android:hint="password"
                 android:layout_below="@+id/editText"
                 android:ellipsize="start"
@@ -68,7 +71,7 @@
             android:layout_below="@+id/editText2"
             android:layout_marginTop="10dp"
 
-            android:background="#72b6d5"
+            android:background="#fbc2c2c2"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_row="41"
             android:layout_column="11"

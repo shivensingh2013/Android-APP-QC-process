@@ -29,37 +29,28 @@ public class login extends AppCompatActivity implements View.OnClickListener{
 
     String id1;
     String id2;
-
-
-    SwipeRefreshLayout swipeRefreshLayout;
-    List category_id_array;
     public static List[] object;
     AppProvider appProvider;
-    ListView listview;
-    public  static  int  category_id;
-    ArrayAdapter<String> adapter;
     EditText id;
     EditText id_pass;
-
     ImageView image;
+
+
+
 @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.login_lay);
-    image = (ImageView) findViewById(R.id.imageView);
-
-    image.setImageResource(R.mipmap.overcart);
+        image = (ImageView) findViewById(R.id.imageView);
+        image.setImageResource(R.mipmap.overcart);
         id=(EditText) findViewById(R.id.editText);
-       id_pass=(EditText) findViewById(R.id.editText2);
-
+        id_pass=(EditText) findViewById(R.id.editText2);
         appProvider = new AppProvider();
-        Toast.makeText(getApplicationContext(),"not ing",Toast.LENGTH_SHORT).show();
-
-
     }
+
+
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -71,7 +62,11 @@ public class login extends AppCompatActivity implements View.OnClickListener{
         super.onStop();
         appProvider.detach();
     }
-@Override
+
+
+    @Override
+
+
     public void onClick(View view)
     {
 
@@ -80,37 +75,25 @@ public class login extends AppCompatActivity implements View.OnClickListener{
                 Login();
                 break;
     }
-
-
     }
 
+    //function for login
     public void Login()
-
-
         {
-
-
             if (id != null) {
                 id1= String.valueOf(id.getText());
-                Toast.makeText(getApplicationContext(),id1,Toast.LENGTH_SHORT).show();
+
             }
             if(id_pass!=null)
             {
                 id2=String.valueOf(id_pass.getText());
-                Toast.makeText(getApplicationContext(),id2,Toast.LENGTH_SHORT).show();
             }
-
 
             appProvider.loginc(id1,id2,new IViewCallback<JSONObject>()
             {
-
-
                 @Override
                 public void onSuccess(JSONObject dataObject)
                 {
-
-//                    TextView a=(TextView) findViewById(R.id.error_print);
-//                    a.setText(" ");
                     String val= null;
                     try {
 
@@ -123,29 +106,25 @@ public class login extends AppCompatActivity implements View.OnClickListener{
 
                     if(val.equals("true"))
                     {
-                        Log.d("no error",val);
+
 
                         Intent i = new Intent(login.this, LauncherActivity.class);
 
                         startActivity(i);
-
-
                     }
                     else
                     {
+                        Toast.makeText(getApplicationContext(),"Username or password invalid",Toast.LENGTH_LONG);
 
                     }
 
 
                 }
 
-
-
-
                 @Override
                 public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
                     Log.d("onerror","jason");
-                    Toast.makeText(getApplicationContext(),"error no success",Toast.LENGTH_SHORT).show();
+
 
                 }
 
