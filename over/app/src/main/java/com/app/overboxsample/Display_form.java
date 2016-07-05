@@ -48,77 +48,48 @@ public class Display_form extends AppCompatActivity {
 
     public static List lt;
 
-    JSONObject jsonresult;
+    JSONObject UploadQCData= new JSONObject();
 
     int id = 0;
     int json_var = 0;
     int auto_var = 0;   //used to map TextView with AutoTextComplete
-    JSONObject jb;
+    JSONObject jb=imei_check.productAllDetails;
     AutoCompleteTextView auto;
-
     LinearLayout lm;
-
     HashMap<Integer,String> map = new HashMap<Integer,String>();
     HashMap<Integer,String> map_key = new HashMap<Integer,String>();
     ArrayList map_autocomplete = new ArrayList();
-
-
-
-
-
     AppProvider appProvider;
     ArrayAdapter<String> adapter1;
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.fetch_category);
-        jsonresult = new JSONObject();
-
         appProvider = new AppProvider();
-
         ButterKnife.inject(this);
 
         //fetching the category value
 
-
-
         List values =  imei_check.formDisplayingObject[0];
         List keys =  imei_check.formDisplayingObject[1];
+        Log.d("productAlldetails", String.valueOf(jb));
 
-        JSONObject jsonObject =imei_check.productAllDetails;
-
-
-
-
-
-        try {
-            JSONArray value = jsonObject.getJSONArray("imeis");
-
-           jb = (JSONObject)value.getJSONObject(0);
-
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-        }
 
         lm = (LinearLayout) findViewById(R.id.linearMain);
-
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
         for(int i=0;i<keys.size();i++)
         {
             String s = (String) keys.get(i);
             String value  = (String) values.get(i);
              map_key.put(id, s);
             String value1 = null;
+
             try {
                 value1 = jb.getString(s);
-             //   Log.d("Keys Value", String.valueOf(value1));
+                Log.d("valuel",value1);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -256,6 +227,9 @@ public class Display_form extends AppCompatActivity {
                         rg.addView(rb[j]); //the RadioButtons are added to the radioGroup instead of the layout
 
                         rb[j].setText(String.valueOf(array.get(j)));
+
+
+
                         if(value1.equals(String.valueOf(array.get(j))))
                         {
                             Log.d("Values are equal",value1);
@@ -329,12 +303,9 @@ public class Display_form extends AppCompatActivity {
                     ap = obj.getString("url");
 
 
-                    if (ap.contains("Brand"))
-                        ap = ap + "?brand=";
-                    else
-                        ap = ap + "?color=";
-
                     final String finalValue = value1;
+
+
                     appProvider.fetchval(ap, new IViewCallback<String>() {
                         @Override
                         public void onSuccess(String dataObject) {
@@ -413,6 +384,8 @@ public class Display_form extends AppCompatActivity {
         lm.addView(button);
     }
 
+
+
     View.OnClickListener handleOnClick(final Button button) {
 
 
@@ -424,10 +397,13 @@ public class Display_form extends AppCompatActivity {
                 button.setBackgroundColor(255);
                 json_var =0;
 
-                JSONObject j;
-                j =  Form_Submit();
+                JSONObject dataReadyForSubmit=  Form_Submit();
+                if(dataReadyForSubmit!=null)
+                    submitData(dataReadyForSubmit);
+                else
+                    Log.d("Json Final Submit", "null");
 
-               submitData(j);
+
 
 
 
@@ -458,7 +434,7 @@ public class Display_form extends AppCompatActivity {
                     tw.setTextColor(Color.parseColor("#000000"));
                     try {
 
-                        jsonresult.put((tw.getText().toString()), S);
+                        UploadQCData.put((tw.getText().toString()), S);
                     } catch (Exception e) {
 
                     }
@@ -482,7 +458,7 @@ public class Display_form extends AppCompatActivity {
                         TextView tw = (TextView) findViewById((key - 1));
                         tw.setTextColor(Color.parseColor("#000000"));
                         try {
-                            jsonresult.put((tw.getText().toString()), S);
+                            UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
                         }
@@ -505,7 +481,7 @@ public class Display_form extends AppCompatActivity {
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#000000"));
                     try {
-                        jsonresult.put((tw.getText().toString()), S);
+                        UploadQCData.put((tw.getText().toString()), S);
                     } catch (Exception e) {
 
                     }
@@ -545,7 +521,7 @@ public class Display_form extends AppCompatActivity {
                         TextView tw = (TextView) findViewById((d));
                         tw.setTextColor(Color.parseColor("#000000"));
                         try {
-                            jsonresult.put((tw.getText().toString()), S);
+                            UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
                         }
@@ -564,10 +540,10 @@ public class Display_form extends AppCompatActivity {
 
         }
 
-        if (jsonresult.length() != 0 && json_var == 0) {
-            Log.d("Json Result", String.valueOf(jsonresult));
+        if (UploadQCData.length() != 0 && json_var == 0) {
+            Log.d("Json Result", String.valueOf(UploadQCData));
             Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
-            return jsonresult;
+            return UploadQCData;
 
         }
         return null;
@@ -604,7 +580,6 @@ public class Display_form extends AppCompatActivity {
 
                 }
             });
-
 
 
 

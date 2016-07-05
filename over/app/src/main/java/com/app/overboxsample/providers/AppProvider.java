@@ -154,7 +154,7 @@ public class AppProvider extends BaseProvider {
 
 
         Log.d("nitify1", "it");
-        categoryId="16";
+
         Request request = RequestFactory.createRequest(
 //             HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi"+categoryId, null, payload, null, 60000, null, null);
                 HttpMethod.POST, "http://dev.api.overboxd.com/api/marketplace/generalqcapi/"+categoryId, null, payload, null, 60000, null, null);
@@ -191,7 +191,7 @@ public class AppProvider extends BaseProvider {
         JSONObject json=new JSONObject();
 
         String imeiInput=String.valueOf(edt.getText());
-        imeiInput="gatch";
+
 
         try {
             json.put("imei",imeiInput);
@@ -291,27 +291,8 @@ public class AppProvider extends BaseProvider {
 //            result.remove("Imei");
 //            result.put("imei",buf );
 
-            textValue="358995057154816";
-            String URL="http://dev.api.overboxd.com/api/marketplace/product/search/imei/"+textValue;
 
-//            JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.GET,URL,
-//                    new Response.Listener<JSONObject>() {
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            HttpResponse<JSONObject> httpResponse = new HttpResponse<>(new HttpResponseStatus(),response);
-//                            notifyResponse(httpResponse, call);
-//
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//
-//                    Log.d("Error", "no response from volley");
-//
-//                    VolleyLog.e("Error: ", error.getMessage());
-//
-//                }
-//            });
+            String URL="http://dev.api.overboxd.com/api/marketplace/product/search/imei/"+textValue;
 
 
             Payload payload=new Payload();

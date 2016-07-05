@@ -146,15 +146,18 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     JSONObject jb = null;
                     JSONObject jb1 = null;
 
+                     Log.d("Json object received", String.valueOf(dataObject));
 
-                    JsonParser jp = new JsonParser();
+
                     JSONArray value= (JSONArray) dataObject.get("data");
                     jb = (JSONObject)value.getJSONObject(0);
+
+                    Log.d("Json String", String.valueOf(jb));
                     String r = jb.getString("object_result");
 
+                    Log.d("Json String",r);
 
-                    JsonObject json =  jp.parse(r).getAsJsonObject();
-                    Log.d("printjsonobje", String.valueOf(json));
+
                     jb1 = new JSONObject(r);
                     Log.d("printjb1", String.valueOf(jb1));
 
