@@ -48,7 +48,6 @@ public class Display_form extends AppCompatActivity {
 
     public static List lt;
 
-
     JSONObject jsonresult;
 
     int id = 0;
@@ -82,11 +81,14 @@ public class Display_form extends AppCompatActivity {
 
         ButterKnife.inject(this);
 
+        //fetching the category value
 
-        List values =  LauncherActivity.object[0];
-        List keys =  LauncherActivity.object[1];
 
-        JSONObject jsonObject = imei_check.jsonresult;
+
+        List values =  imei_check.formDisplayingObject[0];
+        List keys =  imei_check.formDisplayingObject[1];
+
+        JSONObject jsonObject =imei_check.productAllDetails;
 
 
 

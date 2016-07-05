@@ -17,6 +17,7 @@ import com.app.overboxsample.providers.AppProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
@@ -33,21 +34,20 @@ import butterknife.InjectView;
 public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    List category_id_array;
-    public static List[] object;
     AppProvider appProvider;
-    ListView listview;
-    ArrayAdapter<String> adapter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.content_launcher);
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+       // setContentView(R.layout.content_launcher);
         appProvider = new AppProvider();
-        ButterKnife.inject(this);
-        listview = (ListView) findViewById(R.id.listView);
-        fetchCategories();
+       // ButterKnife.inject(this);
+      //  listview = (ListView) findViewById(R.id.listView);
+
+        fetchCategory(imei_check.categoryId);
+
 
     }
 
@@ -86,136 +86,95 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private List[] parseJson(JSONObject data) {
 
-        ArrayList<String> stringArrayList = new ArrayList<String>();//stores the string containing values of the object
-        ArrayList<String> stringKeyList = new ArrayList<String>();//stores the ayyar of al key fields to be prited as a sheet
 
-        JSONObject obj = null;
+    public List[] parseJson(JSONObject data) {
+
+        List<String> stringValueList = new ArrayList<String>();//stores the string containing values of the object
+        List<String> stringKeyList = new ArrayList<String>();//stores the ayyar of al key fields to be prited as a sheet
+
 
         if (data != null) {
             Iterator<String> it = data.keys();
 
-            while (it.hasNext()) {
 
-                String key = it.next();
-                try {
-
-                    obj = new JSONObject(String.valueOf(data.get(key)));//creates the object of the value passsing as a string
+//                try {
+//                    while (it.hasNext()) {
 //
-                }
+//                        String key = it.next();
+//                        Log.d("printjsaon key",key);
+//                        stringKeyList.add(key);
+//                        stringValueList.add(data.getString(key));
+//                    }
+//
+//                }
+//                catch (Exception e) {
+//
+//
+//
+//                }
+            try {
 
-                catch (JSONException e) {
+                for (int i = 0; i < data.names().length(); i++) {
+                    stringKeyList.add(data.names().getString(i));
+                    Log.d("parsejson key",data.names().getString(i));
+                    stringValueList.add(String.valueOf(data.get(data.names().getString(i))));
 
-                }
-
-
-                try {
-
-
-                    if (obj instanceof JSONObject) {
-                        stringKeyList.add(key);
-                        stringArrayList.add(data.getString(key));
-
-
-
-                    } else {
-                        stringArrayList.add(data.getString(key));
-                        stringKeyList.add(key);
-
-                    }
-                } catch (Throwable e) {
 
 
                 }
             }
+            catch (Exception e){}
+
         }
 
-        return new List[]{stringArrayList, stringKeyList};
+        return new List[]{stringValueList, stringKeyList};
     }
 
-    private void fetchCategories() {
-        //the fetch categories will call the function in app provider
-        appProvider.fetchCategories(new IViewCallback<JSONObject>()
-        {
+
+
+    public void fetchCategory(String categoryId) {
+
+
+        appProvider.fetchCategoryDetails(categoryId,new IViewCallback<JSONObject>() {
+
 
             @Override
             public void onSuccess(JSONObject dataObject) {
 
-                //pretty printing jason
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                JsonParser jp = new JsonParser();
-                JsonElement je = jp.parse(dataObject.toString());
-                String prettyJsonString = gson.toJson(je);
-                Log.d("brand works ",prettyJsonString);
+                try{
+                    JSONObject jb = null;
+                    JSONObject jb1 = null;
 
-                List[] obj = parseJson(dataObject);
-                List values = obj[0];
-                category_id_array = obj[1];
-                Log.d("list", String.valueOf(category_id_array));
-                adapter = new ArrayAdapter<String>(LauncherActivity.this,android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
-                if (dataObject == null) return;
+                    JsonParser jp = new JsonParser();
+                    JSONArray value= (JSONArray) dataObject.get("data");
+                    jb = (JSONObject)value.getJSONObject(0);
+                    String r = jb.getString("object_result");
 
-                // Assign adapter to ListView
-                listview.setAdapter(adapter);
 
-                listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    JsonObject json =  jp.parse(r).getAsJsonObject();
+                    Log.d("printjsonobje", String.valueOf(json));
+                    jb1 = new JSONObject(r);
+                    Log.d("printjb1", String.valueOf(jb1));
 
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view,
-                                            int position, long id) {
+                    Log.d("printr",r);
+                    imei_check.formDisplayingObject = parseJson(jb1);//error
 
-                        fetchCategory((String) category_id_array.get(position));
+                    Log.d("formDisplayingbject", String.valueOf(imei_check.formDisplayingObject[1]));
 
+
+                    if(imei_check.isProductPresent)
+                    {
+                    Intent i=new Intent(LauncherActivity.this,Display_form.class);
+                    startActivity(i);
                     }
 
-                });
+                    else
+                    {
+                        Intent i=new Intent(LauncherActivity.this,fetch_category.class);
+                        startActivity(i);}
 
-
-            }
-
-            @Override
-            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject)
-            {
-
-            }
-        });
-    }
-
-    private void fetchCategory(String categoryId) {
-
-        IViewCallback<String> io2=new IViewCallback<String>() {
-
-
-            @Override
-            public void onSuccess(String dataObject) {
-
-                Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                JsonParser jp = new JsonParser();
-                JsonElement je = jp.parse(dataObject.toString());
-                String prettyJsonString = gson.toJson(je);
-
-                JSONObject jb = null;
-
-                try {
-                    JSONArray array = new JSONArray(dataObject);
-                    jb = (JSONObject)array.getJSONObject(0);
-
-                    //converts the data into a normal object now containing object itself
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                JSONObject jb1 = null;
-
-
-                try {
-
-                    String r = jb.getString("object_result");
-                    jb1 = new JSONObject(r);
 
                     //creates the value of object result as the new object
 
@@ -223,13 +182,10 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     e.printStackTrace();
                 }
 
-                object =   parseJson(jb1); //parses and print the value
+                //parses and print the value
 
-                if(dataObject == null) return;
 
-                Intent i = new Intent(LauncherActivity.this, option_imei.class);
 
-                startActivity(i);
 
             }
 
@@ -237,11 +193,9 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
             @Override
-            public void onError(String errorMessage, int errorCode, @Nullable String dataObject) {
-              //  setRefreshing(false);
+            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+                //  setRefreshing(false);
             }
-        };
-
-        appProvider.fetchCategoryDetails(categoryId,io2);
+        });
     }
 }

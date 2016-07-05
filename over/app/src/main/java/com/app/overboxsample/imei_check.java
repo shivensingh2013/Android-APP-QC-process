@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.overboxsample.network.interfaces.IViewCallback;
@@ -22,32 +23,30 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class imei_check extends AppCompatActivity implements View.OnClickListener{
 
-
-public static  JSONObject jsonresult;
+    public static List[] formDisplayingObject;
+    public static EditText imeival;
+    public static JSONObject productOnUpload;
+    public static  JSONObject productAllDetails;
+    public static boolean isProductPresent;
+    public static String categoryId;
     AppProvider appProvider;
-    EditText imeival;
+
 
 @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.imei_display);
-
         imeival=(EditText) findViewById(R.id.editText);
-
-
         appProvider = new AppProvider();
 
 
-
-    }
-
-
-
+}
     @Override
     protected void onStart() {
         super.onStart();
@@ -67,83 +66,47 @@ public static  JSONObject jsonresult;
 
         switch (view.getId()) {
             case R.id.button:
-                imeiCheckFunc();
+                getProductOnUpload();
                 break;
         }
 
     }
 
 
-public void imeiCheckFunc()
-{
+    public void getProductOnUpload()
+    {
 
-    String h=String.valueOf(imeival.getText());
-    JSONObject a=new JSONObject();
-    try {
-        a.put("imei", h);
-    } catch (JSONException e) {
-        e.printStackTrace();
-    }
+        appProvider.getInitialImei(imei_check.imeival, new IViewCallback<JSONObject>() {
 
 
+            @Override
+            public void onSuccess(JSONObject dataObject) {
 
-    appProvider.fetch_Imei(a,imeival,new IViewCallback<JSONObject>() {
+                imei_check.productOnUpload=dataObject;
 
+                Intent j = new Intent(imei_check.this, product_summary.class);
+                startActivity(j);
 
-        @Override
-        public void onSuccess(JSONObject dataObject) {
-
-            String val = null;
-          //  Log.d("Mongo data", String.valueOf(dataObject));
-
-            try {
-
-                JSONArray value1=(JSONArray)dataObject.get("imeis");
-                Log.d("Mongo data",String.valueOf(value1));
-
-                if(String.valueOf(dataObject).contains("null"))
-                {
-                    Toast.makeText(getApplicationContext(), "reaching if condition", Toast.LENGTH_SHORT).show();
-
-                    Intent j = new Intent(imei_check.this, fetch_category.class);
-                    startActivity(j);
-                }
-
-                else
-
-                {
-                   jsonresult = dataObject;
-                    Toast.makeText(getApplicationContext(), "reaching else condition", Toast.LENGTH_SHORT).show();
-
-                    Intent intent = new Intent(imei_check.this, Display_form.class);
-
-
-
-                    startActivity(intent);
-
-
-
-                }
-
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
 
 
-        }
+            @Override
+            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+                Toast.makeText(getApplicationContext(), "product not uploaded yet", Toast.LENGTH_LONG).show();
 
 
-        @Override
-        public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
-            Log.d("onerror", "value error in response imei not a jsonobject");
+
+            }
 
 
-        }
+        });
 
 
-    });
 
-}
+
+
+
+    }
+
+
 }

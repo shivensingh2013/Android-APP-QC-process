@@ -14,18 +14,18 @@
 <!--we can activate the login later-->
 
 
-        <activity
-            android:name=".login"
-            android:theme="@style/AppTheme.NoActionBar">
-            android:screenOrientation="portrait">
+        <!--<activity-->
+            <!--android:name=".login"-->
+            <!--android:theme="@style/AppTheme.NoActionBar">-->
+            <!--android:screenOrientation="portrait">-->
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
 
-        </activity>
+        <!--</activity>-->
 
         <!-- change the intent filter  from launcher to login-->
 
@@ -33,11 +33,7 @@
             android:name=".LauncherActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
 
         </activity>
 
@@ -51,6 +47,11 @@
         <activity android:name=".imei_check"
             android:label="IMEI"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             </activity>
 
 
@@ -64,6 +65,12 @@
 
         <activity
             android:name=".fetch_category"
+
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">>
+        </activity>
+        <activity
+            android:name=".product_summary"
 
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">>

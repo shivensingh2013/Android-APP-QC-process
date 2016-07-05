@@ -43,15 +43,10 @@ import butterknife.ButterKnife;
 
 public class fetch_category extends AppCompatActivity {
 
+    public static List lt;
 
+    JSONObject UploadQCData=new JSONObject();
 
-   public static List lt;
-    public static List keys;
-
-    ListView list;
-
-   public static  JSONObject jsonresult;
-    String date;
     int id = 0;
     int json_var = 0;
     int auto_var = 0;   //used to map TextView with AutoTextComplete
@@ -64,39 +59,31 @@ public class fetch_category extends AppCompatActivity {
     HashMap<Integer,String> map_key = new HashMap<Integer,String>();
     ArrayList map_autocomplete = new ArrayList();
 
-
-
-
-
     AppProvider appProvider;
     ArrayAdapter<String> adapter1;
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.fetch_category);
-        jsonresult = new JSONObject();
-
         appProvider = new AppProvider();
 
         ButterKnife.inject(this);
+        List values =  imei_check.formDisplayingObject[0];
+        List keys =  imei_check.formDisplayingObject[1];
 
-      //  categoryJsonDump = (TextView)findViewById(R.id.textView);
-
-       List values =  LauncherActivity.object[0];
-         keys =  LauncherActivity.object[1];
+        Log.d("print keys",String.valueOf(keys));
 
 
         // Creating a new RelativeLayout
 //        ScrollView scrollView = new ScrollView(this);
 
-         lm = (LinearLayout) findViewById(R.id.linearMain);
 
-
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        lm = (LinearLayout) findViewById(R.id.linearMain);
 
         for(int i=0;i<keys.size();i++)
         {
@@ -109,7 +96,6 @@ public class fetch_category extends AppCompatActivity {
             final LinearLayout ll = new LinearLayout(this);
             TextView product = new TextView(this);
             product.setId(id);
-
             product.setText(s+"");
             product.setTextSize(20);
             product.setPadding(0, 10, 0, 10);
@@ -127,9 +113,8 @@ public class fetch_category extends AppCompatActivity {
 //                Log.d("AUTO TEXT",s);
                 map_autocomplete.add(id);
             }
+
             id = id+1;
-
-
 
             if(value.equals("flag"))
             {
@@ -279,25 +264,21 @@ public class fetch_category extends AppCompatActivity {
             }
 
             else if(value.contains("autocomplete")) {
+                try{
 
-
-                JSONObject obj = null;
-                try {
+                    JSONObject obj = null;
                     obj = new JSONObject(value);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                String ap = "";
-                try {
+                    String ap = "";
                     ap = obj.getString("url");
 
+//                    if (ap.contains("Brand"))
+//                        ap = ap + "?brand=";
+//                    else
+//                        ap = ap + "?color=";
 
-                    if (ap.contains("Brand"))
-                        ap = ap + "?brand=";
-                    else
-                        ap = ap + "?color=";
+                    appProvider.fetchval(ap, new IViewCallback<String>()
 
-                    appProvider.fetchval(ap, new IViewCallback<String>() {
+                    {
                         @Override
                         public void onSuccess(String dataObject) {
                             JSONArray a = null;
@@ -346,7 +327,8 @@ public class fetch_category extends AppCompatActivity {
                         }
                     });
 
-                } catch (JSONException e) {
+                    }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
 
@@ -381,14 +363,15 @@ public class fetch_category extends AppCompatActivity {
             public void onClick(View v) {
 
                 button.getShadowColor();
-
                 button.setBackgroundColor(255);
                 json_var =0;
 
-                JSONObject j= new JSONObject();
-               j =  Form_Submit();
-                Log.d("Json Final Submit", String.valueOf(j));
-                submitData(j);
+                JSONObject dataReadyForSubmit =  Form_Submit();
+                Log.d("Json Final Submit", String.valueOf(dataReadyForSubmit));
+                if(dataReadyForSubmit!=null)
+                submitData(dataReadyForSubmit);
+                else
+                    Log.d("Json Final Submit", "null");
 
 
             }
@@ -418,7 +401,7 @@ public class fetch_category extends AppCompatActivity {
                     tw.setTextColor(Color.parseColor("#000000"));
                     try {
 
-                        jsonresult.put((tw.getText().toString()), S);
+                        UploadQCData.put((tw.getText().toString()), S);
                     } catch (Exception e) {
 
                     }
@@ -442,7 +425,7 @@ public class fetch_category extends AppCompatActivity {
                         TextView tw = (TextView) findViewById((key - 1));
                         tw.setTextColor(Color.parseColor("#000000"));
                         try {
-                            jsonresult.put((tw.getText().toString()), S);
+                            UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
                         }
@@ -466,7 +449,7 @@ public class fetch_category extends AppCompatActivity {
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#000000"));
                     try {
-                        jsonresult.put((tw.getText().toString()), S);
+                        UploadQCData.put((tw.getText().toString()), S);
                     } catch (Exception e) {
 
                     }
@@ -481,7 +464,8 @@ public class fetch_category extends AppCompatActivity {
 
 //
 
-            else if ((map.get(key)).equals("autocomplete")) {
+            else if ((map.get(key)).equals("autocomplete"))
+            {
 
                 int d = (int) map_autocomplete.get(auto_var);
                 //  Log.d("AUTO TEXT AGAIN", String.valueOf(d));
@@ -506,7 +490,7 @@ public class fetch_category extends AppCompatActivity {
                         TextView tw = (TextView) findViewById((d));
                         tw.setTextColor(Color.parseColor("#000000"));
                         try {
-                            jsonresult.put((tw.getText().toString()), S);
+                            UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
                         }
@@ -528,7 +512,7 @@ public class fetch_category extends AppCompatActivity {
                     tw.setTextColor(Color.parseColor("#000000"));
                     String S = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                     try {
-                        jsonresult.put((tw.getText().toString()), S);
+                        UploadQCData.put((tw.getText().toString()), S);
                     } catch (Exception e) {
 
                     }
@@ -537,33 +521,29 @@ public class fetch_category extends AppCompatActivity {
 
 
         }
-        //Log.d("Json Result", String.valueOf(jsonresult));
-        if (jsonresult.length() != 0 && json_var == 0) {
-            Log.d("Json Result", String.valueOf(jsonresult));
+        //
+            if (UploadQCData.length()!=0&&json_var!=1)
+            {
+            Log.d("Json Result", String.valueOf(UploadQCData));
             Toast.makeText(getApplicationContext(), "Data Saved", Toast.LENGTH_SHORT).show();
-            return jsonresult;
+            return UploadQCData;
 
-        }
+            }
         return null;
-    }
+    } //collects data from all editboxes and other boxes
 
 
-
-
-
-    public void submitData(JSONObject formData)
+    public void submitData(JSONObject dataReadyFoSubmit)
     {
 
         try {
 
-
-            appProvider.submitData(formData, new IViewCallback<JSONObject>()
+            appProvider.submitData(dataReadyFoSubmit,new IViewCallback<JSONObject>()
             {
                 @Override
                 public void onSuccess(JSONObject dataObject) {
 
                     Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
-
                     Log.d("Submit",String.valueOf(dataObject));
 
                 }
@@ -571,16 +551,11 @@ public class fetch_category extends AppCompatActivity {
                 @Override
                 public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
 
-
                     Log.d("Submit","error in submissionat fetchcategory ");
-
 
 
                 }
             });
-
-
-
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -588,8 +563,6 @@ public class fetch_category extends AppCompatActivity {
 
 
     }
-
-
 
 
 
