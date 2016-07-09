@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="false">
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/qc_report"
+    >
+
+    <TableRow
+        android:id="@+id/report_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/Field"
+            android:text=""/>
+
+
+        <TextView
+            android:id="@+id/Value"
+            android:text=""/>
+        <TextView />
+
+
+
+    </TableRow>
+
+
+    <Button
+        android:id="@+id/OKButton"
+        android:text="Restart QC"
+        android:textSize="20dp"
+        android:onClick="onClick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        />
+
+
+
+</TableLayout>
+
+    </ScrollView>

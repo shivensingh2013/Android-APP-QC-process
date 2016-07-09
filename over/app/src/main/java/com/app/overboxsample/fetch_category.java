@@ -529,12 +529,17 @@ public class fetch_category extends AppCompatActivity {
             return UploadQCData;
 
             }
-        return null;
+        else {
+                Toast.makeText(this,"Incomplete Form",Toast.LENGTH_LONG).show();
+                return null;
+            }
     } //collects data from all editboxes and other boxes
 
 
     public void submitData(JSONObject dataReadyFoSubmit)
     {
+        product_summary a=new product_summary();
+
 
         try {
 
@@ -542,9 +547,10 @@ public class fetch_category extends AppCompatActivity {
             {
                 @Override
                 public void onSuccess(JSONObject dataObject) {
-
                     Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
-                    Log.d("Submit",String.valueOf(dataObject));
+                    Log.d("Submit", String.valueOf(dataObject));
+                    UpdateLStatus("Under ME");
+
 
                 }
 
@@ -560,6 +566,33 @@ public class fetch_category extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+    }
+    public void UpdateLStatus(final String status)
+    {
+
+        appProvider.update_L_status(status,new IViewCallback<JSONObject>() {
+
+
+            @Override
+            public void onSuccess(JSONObject dataObject) {
+
+                Toast.makeText(getApplicationContext(),"changed Lstatus",Toast.LENGTH_SHORT).show();
+                Log.d("changedto","new");
+
+            }
+
+
+            @Override
+            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+
+
+
+            }
+
+
+        });
 
 
     }

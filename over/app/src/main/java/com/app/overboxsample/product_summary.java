@@ -49,9 +49,6 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
             JSONObject job = (JSONObject) value.get(0);
             imei_check.productOnUpload=job;
             imei_check.categoryId=job.getString("category_id");
-
-            Log.d("Sql initial data", String.valueOf(job));
-
             JSONObject convert= new JSONObject();
             convert.put("IMEI",job.get("imei"));
             convert.put("Client SKU",job.get("sku"));
@@ -59,10 +56,8 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
             convert.put("Model Number",job.get("model_number"));
             convert.put("Brand",job.get("brands"));
             convert.put("Product Name",job.get("products_name"));
-            ;
 
-
-
+            //putting json to Table Layout dynamically
             if (convert!= null) {
                 int c = 0;
                 Iterator<String> it = convert.keys();
@@ -121,6 +116,7 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
         switch (view.getId()) {
             case R.id.SQCbutton:
                 imeiCheckFunc();
+
                 break;
         }
 
@@ -129,46 +125,47 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
 
     public void imeiCheckFunc() {
 
-        String h = String.valueOf(imei_check.imeival.getText());
-
-
         appProvider.fetch_Imei(imei_check.imeival, new IViewCallback<JSONObject>() {
 
 
             @Override
             public void onSuccess(JSONObject dataObject) {
-
-                String val = null;
-
-
                 try {
+                    String status = "Under QC";
 
-                    Log.d("initial_summary", dataObject.getString("data"));
-                    if (dataObject.getBoolean("success")) {
-
-                        imei_check.isProductPresent=true;
-                        JSONArray buf=(JSONArray)dataObject.get("data");
-                        imei_check.productAllDetails= (JSONObject)buf.get(0);
-                        Log.d("data present", String.valueOf(imei_check.productAllDetails));
-                        Toast.makeText(getApplicationContext(), "Display filled form ", Toast.LENGTH_SHORT).show();
-
-                    } else
-
-                    {
-                        imei_check.isProductPresent=false;
-                        Log.d("going","tonew form");
-                        Toast.makeText(getApplicationContext(), "displaying new form", Toast.LENGTH_SHORT).show();
+                    if (!imei_check.productOnUpload.get("lstatus").equals(("Under ME"))) {
+                        UpdateLStatus(status);
 
                     }
+                        if (dataObject.getBoolean("success")) {
+
+                            imei_check.isProductPresent = true;
+                            JSONArray buf = (JSONArray) dataObject.get("data");
+                            imei_check.productAllDetails = (JSONObject) buf.get(0);
+//                        Log.d("data present", String.valueOf(imei_check.productAllDetails));
+                            Toast.makeText(getApplicationContext(), "Form Already Present ", Toast.LENGTH_SHORT).show();
 
 
-                    Intent inte = new Intent(product_summary.this, LauncherActivity.class);
-                    startActivity(inte);
+                        } else
+
+                        {
+                            imei_check.isProductPresent = false;
+                            Log.d("going", "tonew form");
+                            Toast.makeText(getApplicationContext(), "Form Not Present", Toast.LENGTH_SHORT).show();
+
+                        }
 
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                        Intent inte = new Intent(product_summary.this, LauncherActivity.class);
+                        startActivity(inte);
+
+
+
                 }
+                    catch(JSONException e){
+                        e.printStackTrace();
+                    }
+
 
 
             }
@@ -183,6 +180,35 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
 
 
         });
+
+    }
+
+
+    public void UpdateLStatus(final String status)
+    {
+
+        appProvider.update_L_status(status,new IViewCallback<JSONObject>() {
+
+
+            @Override
+            public void onSuccess(JSONObject dataObject) {
+
+                Toast.makeText(getApplicationContext(),"changed Lstatus",Toast.LENGTH_SHORT).show();
+                Log.d("changedto",status);
+
+            }
+
+
+            @Override
+            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+
+
+
+            }
+
+
+        });
+
 
     }
 }

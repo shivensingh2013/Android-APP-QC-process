@@ -71,6 +71,17 @@ public class Display_form extends AppCompatActivity {
         appProvider = new AppProvider();
         ButterKnife.inject(this);
 
+
+        mainFunction();
+
+    }
+
+
+
+
+
+    public void mainFunction()
+    {
         //fetching the category value
 
         List values =  imei_check.formDisplayingObject[0];
@@ -83,7 +94,7 @@ public class Display_form extends AppCompatActivity {
         {
             String s = (String) keys.get(i);
             String value  = (String) values.get(i);
-             map_key.put(id, s);
+            map_key.put(id, s);
             String value1 = null;
 
             try {
@@ -141,7 +152,7 @@ public class Display_form extends AppCompatActivity {
                 rb[1].setId(id);
                 if(value1.equals("incomplete"))
                 {
-                     default_id = id;
+                    default_id = id;
                 }
                 id = id+1;
                 rg.addView(rb[0]); //the RadioButtons are added to the radioGroup instead of the layout
@@ -243,7 +254,7 @@ public class Display_form extends AppCompatActivity {
                         e.printStackTrace();
                     }
 
-                  //  rg.check(default_id);
+                    //  rg.check(default_id);
                     if(rg.getParent()!=null)
                         ((LinearLayout)rg.getParent()).removeView(rg);
                     rg.setPadding(40, 10, 40, 10);
@@ -564,9 +575,11 @@ public class Display_form extends AppCompatActivity {
                 @Override
                 public void onSuccess(JSONObject dataObject) {
 
-                    Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
 
-                    Log.d("Submit",String.valueOf(dataObject));
+                    Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
+                    UpdateLStatus("Under ME");
+
+                    Log.d("changed to me",String.valueOf(dataObject));
 
                 }
 
@@ -590,7 +603,33 @@ public class Display_form extends AppCompatActivity {
 
     }
 
+    public void UpdateLStatus(final String status)
+    {
 
+        appProvider.update_L_status(status,new IViewCallback<JSONObject>() {
+
+
+            @Override
+            public void onSuccess(JSONObject dataObject) {
+
+                Toast.makeText(getApplicationContext(),"changed Lstatus",Toast.LENGTH_SHORT).show();
+                Log.d("changedto",status);
+
+            }
+
+
+            @Override
+            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
+
+
+
+            }
+
+
+        });
+
+
+    }
 
 
 

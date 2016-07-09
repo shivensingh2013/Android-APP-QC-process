@@ -169,19 +169,21 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
                     if(imei_check.isProductPresent)
                     {
-                    Intent i=new Intent(LauncherActivity.this,Display_form.class);
+                    Intent i=new Intent(LauncherActivity.this,QC_Report.class);
                     startActivity(i);
                     }
 
                     else
                     {
                         Intent i=new Intent(LauncherActivity.this,fetch_category.class);
-                        startActivity(i);}
+                        startActivity(i);
+                    }
 
 
                     //creates the value of object result as the new object
 
-                } catch (JSONException e) {
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
 

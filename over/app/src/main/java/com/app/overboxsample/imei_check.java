@@ -82,17 +82,30 @@ public class imei_check extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onSuccess(JSONObject dataObject) {
 
-                imei_check.productOnUpload=dataObject;
+                try {
 
-                Intent j = new Intent(imei_check.this, product_summary.class);
-                startActivity(j);
+                    if (dataObject.getBoolean("success")) {
+                        imei_check.productOnUpload = dataObject;
+                        Intent j = new Intent(imei_check.this, product_summary.class);
+                        startActivity(j);
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Product not Uploaded ",Toast.LENGTH_LONG).show();
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
 
             }
 
 
             @Override
             public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
-                Toast.makeText(getApplicationContext(), "product not uploaded yet", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Volley error", Toast.LENGTH_LONG).show();
 
 
 

@@ -331,8 +331,51 @@ public class AppProvider extends BaseProvider {
     }
 
 
+    public void update_L_status(String status,final IViewCallback<JSONObject> call)
+    {
+        try{
 
 
+            JSONObject result=new JSONObject();
+            result.put("imei",imei_check.imeival.getText());
+            result.put("lstatus",status);
+
+
+
+            String URL="http://dev.api.overboxd.com/api/marketplace/product/updatestatus";
+
+            JsonObjectRequest req = new JsonObjectRequest(com.android.volley.Request.Method.POST,URL,result,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            HttpResponse<JSONObject> httpResponse = new HttpResponse<>(new HttpResponseStatus(),response);
+                            notifyResponse(httpResponse, call);
+
+                        }
+                    }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                    Log.d("Error", "no response from volley");
+
+                    VolleyLog.e("Error: ", error.getMessage());
+
+                }
+            });
+
+
+
+
+
+            VolleyQueueUtils.getGeneralRequestQueue().add(req);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+
+    }
 
 
 
