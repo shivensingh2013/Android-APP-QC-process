@@ -1,27 +1,20 @@
 package com.app.overboxsample;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar.LayoutParams;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -46,13 +38,13 @@ public class fetch_category extends AppCompatActivity {
     public static List lt;
 
     JSONObject UploadQCData=new JSONObject();
-
+    String text_set;
     int id = 0;
     int json_var = 0;
     int auto_var = 0;   //used to map TextView with AutoTextComplete
-
+    JSONObject Value1;
     AutoCompleteTextView auto;
-
+    String type;
     LinearLayout lm;
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
@@ -76,7 +68,7 @@ public class fetch_category extends AppCompatActivity {
         List values =  imei_check.formDisplayingObject[0];
         List keys =  imei_check.formDisplayingObject[1];
 
-        Log.d("print keys",String.valueOf(keys));
+        Log.d("Category print keys",String.valueOf(keys));
 
 
         // Creating a new RelativeLayout
@@ -89,8 +81,17 @@ public class fetch_category extends AppCompatActivity {
         {
             String s = (String) keys.get(i);
             String value  = (String) values.get(i);
-            map_key.put(id, s);
+            try {
+                 Value1 = new JSONObject(value);
+               type = Value1.getString("type");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+
+
+            map_key.put(id, s);
+            id = id+1;
             //create a dynamic layout
 
             final LinearLayout ll = new LinearLayout(this);
@@ -107,79 +108,57 @@ public class fetch_category extends AppCompatActivity {
             product.setGravity(View.TEXT_ALIGNMENT_CENTER);
             lm.addView(product);
 
-            if(value.contains("autocomplete"))
+            if((type.contains("autocomplete")))
             {
-//                Log.d("AUTO TEXT ID", String.valueOf(id));
-//                Log.d("AUTO TEXT",s);
                 map_autocomplete.add(id);
-            }
-
-            id = id+1;
-
-            if(value.equals("flag"))
-            {
-               //enter
-                map.put(id,value);
-                final  RadioButton[] rb = new RadioButton[2];
-                RadioGroup rg = new RadioGroup(this); //create the RadioGroup
-
-                //allradio.add(rg);
-                rg.setId(id);
-                id =id+ 1;
-                //allradio.add(rg);
-//                rg.setId(radio_p);
-//                radio_p = radio_p +1;
-                rg.setOrientation(RadioGroup.VERTICAL);
-                rb[0]  = new RadioButton(this);
-                rb[0].setId(id);
                 id = id+1;
-                rb[1]  = new RadioButton(this);
-                rb[1].setId(id);
-                id = id+1;
-                rg.addView(rb[0]); //the RadioButtons are added to the radioGroup instead of the layout
-
-                rb[0].setText("complete");
-                rg.addView(rb[1]);
-                rb[1].setText("incomplete");
-                if(rg.getParent()!=null)
-                    ((LinearLayout)rg.getParent()).removeView(rg);
-                rg.setPadding(40, 10, 40, 10);
-                rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                lm.addView(rg);
 
             }
 
-            else if(value.equals("text"))
-            {
-                map.put(id,value);
+
+            if(type.equals("text")) {
+                String set_data="";
+                map.put(id, value);
                 EditText edt = new EditText(this);
+                try {
+                    set_data = Value1.getString("set");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (set_data.equals("date")) {
+                     set_data = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    edt.setText(set_data);
+                }
+                else if(set_data !=null)
+                {
+                    edt.setText(set_data);
+                }
+
                 edt.setId(id);
                 id =id+ 1;
-//                edt.getBackgroundTintMode();
+//
                 edt.setPadding(40, 10, 40, 10);
                 edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
-//                allEds.add(edt);
-//                edt.setId(ed_p);
-//                ed_p = ed_p +1;
+//
                 lm.addView(edt);
             }
-            else if(value.equals("date"))
-            {
-                map.put(id,value);
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-
-                id =id+ 1;
-                TextView date1 = new TextView(this);
-                date1.setText(date);
-                date1.setTextSize(20);
-                date1.setTextColor(Color.parseColor("#2980b9"));
-                date1.setPadding(40, 10, 40, 10);
-                date1.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                lm.addView(date1);
-
-            }
+//            else if(type.equals("date"))
+//            {
+//                map.put(id,value);
+//                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//
+//                id =id+ 1;
+//                TextView date1 = new TextView(this);
+//                date1.setText(date);
+//                date1.setTextSize(20);
+//                date1.setTextColor(Color.parseColor("#2980b9"));
+//                date1.setPadding(40, 10, 40, 10);
+//                date1.setBackgroundColor(Color.parseColor("#fbfcfc"));
+//                lm.addView(date1);
+//
+//            }
             //if radio in value we have to make it a object
-            else if(value.contains("radio"))
+            else if(type.contains("radio"))
                 {
                     map.put(id,"radio");
 
@@ -187,7 +166,7 @@ public class fetch_category extends AppCompatActivity {
                     String r = null;
                     try {
                          jsonObj = new JSONObject(value);
-                         r = jsonObj.getString("radio");
+                         r = jsonObj.getString("set");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -232,49 +211,16 @@ public class fetch_category extends AppCompatActivity {
                    }
                 }
 
-            else if(value.contains("checkbox"))
-            {
-                map.put(id,"checkbox");
-                id =id+ 1;
-
-                JSONObject jsonObj = null;
-                String r = null;
-                try
-                {
-                    jsonObj = new JSONObject(value);
-                    r = jsonObj.getString("checkbox");
-                    jsonObj = new JSONObject(r);
-                    Iterator<String> it = jsonObj.keys();
-
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        CheckBox check = new CheckBox(this);
-//
-
-                        check.setPadding(40, 10, 40, 10);
-                        check.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                        lm.addView(check);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    }
 
 
-            }
-
-            else if(value.contains("autocomplete")) {
+            else if(type.contains("autocomplete")) {
                 try{
 
                     JSONObject obj = null;
                     obj = new JSONObject(value);
                     String ap = "";
-                    ap = obj.getString("url");
+                    ap = obj.getString("set");
 
-//                    if (ap.contains("Brand"))
-//                        ap = ap + "?brand=";
-//                    else
-//                        ap = ap + "?color=";
 
                     appProvider.fetchval(ap, new IViewCallback<String>()
 

@@ -6,19 +6,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.providers.AppProvider;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +19,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 
 public class LauncherActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -45,9 +34,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
         appProvider = new AppProvider();
        // ButterKnife.inject(this);
       //  listview = (ListView) findViewById(R.id.listView);
-
         fetchCategory(imei_check.categoryId);
-
 
     }
 
@@ -98,29 +85,12 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
             Iterator<String> it = data.keys();
 
 
-//                try {
-//                    while (it.hasNext()) {
-//
-//                        String key = it.next();
-//                        Log.d("printjsaon key",key);
-//                        stringKeyList.add(key);
-//                        stringValueList.add(data.getString(key));
-//                    }
-//
-//                }
-//                catch (Exception e) {
-//
-//
-//
-//                }
             try {
 
                 for (int i = 0; i < data.names().length(); i++) {
                     stringKeyList.add(data.names().getString(i));
                     Log.d("parsejson key",data.names().getString(i));
                     stringValueList.add(String.valueOf(data.get(data.names().getString(i))));
-
-
 
                 }
             }
@@ -165,8 +135,8 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     imei_check.formDisplayingObject = parseJson(jb1);//error
 
                     Log.d("formDisplayingbject", String.valueOf(imei_check.formDisplayingObject[1]));
-
-
+                    Log.d("formDisplayingbjectKey", String.valueOf(imei_check.formDisplayingObject[0]));
+//
                     if(imei_check.isProductPresent)
                     {
                     Intent i=new Intent(LauncherActivity.this,QC_Report.class);
