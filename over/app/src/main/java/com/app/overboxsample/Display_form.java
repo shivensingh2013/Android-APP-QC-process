@@ -99,7 +99,7 @@ public class Display_form extends AppCompatActivity {
 
             try {
                 value1 = jb.getString(s);
-                Log.d("valuel",value1);
+//                Log.d("valuel",value1);
 
             } catch (JSONException e) {
                 e.printStackTrace();
