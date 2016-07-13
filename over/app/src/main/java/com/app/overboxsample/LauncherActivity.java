@@ -105,46 +105,20 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
     public void fetchCategory(String categoryId) {
 
-
-        appProvider.fetchCategoryDetails(categoryId,new IViewCallback<JSONObject>() {
-
-
-            @Override
-            public void onSuccess(JSONObject dataObject) {
-
                 try{
-                    JSONObject jb = null;
-                    JSONObject jb1 = null;
 
-                     Log.d("Json object received", String.valueOf(dataObject));
+                    imei_check.formDisplayingObject = parseJson(imei_check.productAllDetails);
 
-
-                    JSONArray value= (JSONArray) dataObject.get("data");
-                    jb = (JSONObject)value.getJSONObject(0);
-
-                    Log.d("Json String", String.valueOf(jb));
-                    String r = jb.getString("object_result");
-
-                    Log.d("Json String",r);
-
-
-                    jb1 = new JSONObject(r);
-                    Log.d("printjb1", String.valueOf(jb1));
-
-                    Log.d("printr",r);
-                    imei_check.formDisplayingObject = parseJson(jb1);//error
-
-                    Log.d("formDisplayingbject", String.valueOf(imei_check.formDisplayingObject[1]));
-                    Log.d("formDisplayingbjectKey", String.valueOf(imei_check.formDisplayingObject[0]));
-//
                     if(imei_check.isProductPresent)
                     {
-                    Intent i=new Intent(LauncherActivity.this,QC_Report.class);
-                    startActivity(i);
+                        Log.d("Displayis","a");
+                        Intent i=new Intent(LauncherActivity.this,QC_Report.class);
+                        startActivity(i);
                     }
 
                     else
                     {
+                        Log.d("FetchCategory","is");
                         Intent i=new Intent(LauncherActivity.this,fetch_category.class);
                         startActivity(i);
                     }
@@ -153,7 +127,7 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
                     //creates the value of object result as the new object
 
                 }
-                catch (JSONException e) {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -167,10 +141,5 @@ public class LauncherActivity extends AppCompatActivity implements View.OnClickL
 
 
 
-            @Override
-            public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
-                //  setRefreshing(false);
-            }
-        });
-    }
+
 }

@@ -55,7 +55,7 @@ public class QC_Report extends AppCompatActivity implements View.OnClickListener
                 cp.setText("  ");
 
                 TextView c2 = new TextView(this);
-                c2.setText(imei_check.productAllDetails.getString(key));
+                c2.setText(imei_check.productAllDetails.getJSONObject(key).getString("value"));
                 c2.setTextSize(20);
                 tr.addView(c1);
                 tr.addView(c2);

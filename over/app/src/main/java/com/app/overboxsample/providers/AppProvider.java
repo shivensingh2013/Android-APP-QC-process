@@ -101,81 +101,7 @@ public class AppProvider extends BaseProvider {
     }
 
 
-    //fetching and returning the data for the formation form
-//    public void fetchCategories(final IViewCallback<JSONObject> callback) {
-//        Payload payload = new Payload();
-//        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-//        payload.add("command", "fetch_categories");
-//
-//        Request request = RequestFactory.createRequest(
-//          //      HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi", null, payload, null, 60000, null, null);
-//                HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi", null, payload, null, 60000, null, null);
-//
-//
-//        VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//
-//                    HttpResponse<JSONObject> httpResponse = new HttpResponse<>(
-//                            new HttpResponseStatus(),
-//                            new JSONObject(response)
-//                    );
-//
-//                    notifyResponse(httpResponse, callback);
-//
-//                } catch (JSONException e) {
-//                    Log.d("Tag","fetchcategory mein prob");
-//
-//
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//
-//            }
-//        }));
-//    }
 
-    public void fetchCategoryDetails(String categoryId, final IViewCallback<JSONObject> callback)
-    {
-        Payload payload = new Payload();
-        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-//        payload.add("command", "fetch_object");
-//        payload.add("category_id", categoryId);
-
-
-
-        Log.d("nitify1", "it");
-
-        Request request = RequestFactory.createRequest(
-//             HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi"+categoryId, null, payload, null, 60000, null, null);
-                HttpMethod.POST, "http://dev.api.overboxd.com/api/marketplace/generalqcapi/"+categoryId, null, payload, null, 60000, null, null);
-                VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>()
-                 {
-                        @Override
-                        public void onResponse(String response) {
-                                            HttpResponse<JSONObject> httpResponse = null;
-                                            try {
-                                                httpResponse = new HttpResponse<>(
-                                                        new HttpResponseStatus(),
-                                                        new JSONObject(response)
-                                                );
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                            Log.d("nitify2","it");
-                                            notifyResponse(httpResponse, callback);
-                             }
-                 },new Response.ErrorListener() {
-                                                        @Override
-                                                        public void onErrorResponse(VolleyError error) {
-
-                                                        }
-                                                    }));
-
-    }
 
 
     public void fetch_Imei(EditText edt,final IViewCallback<JSONObject> call)
@@ -234,9 +160,9 @@ public class AppProvider extends BaseProvider {
         JSONObject result=val;
 
 
-            String buf=(String)result.get("Imei");
-            result.remove("Imei");
-            result.put("imei",buf );
+//            String buf=(String)result.get("Imei");
+//            result.remove("Imei");
+//            result.put("imei",buf );
 
         String URL="http://dev.api.overboxd.com/api/marketplace/submit";
 

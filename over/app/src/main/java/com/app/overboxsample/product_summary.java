@@ -132,6 +132,7 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
                 try {
                     String status = "Under QC";
 
+
                     if (!imei_check.productOnUpload.get("lstatus").equals(("Under ME"))) {
                         UpdateLStatus(status);
 
@@ -139,9 +140,11 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
                         if (dataObject.getBoolean("success")) {
 
                             imei_check.isProductPresent = true;
-                            JSONArray buf = (JSONArray) dataObject.get("data");
-                            imei_check.productAllDetails = (JSONObject) buf.get(0);
-                        Log.d("data present", String.valueOf(imei_check.productAllDetails));
+                            imei_check.productAllDetails = (JSONObject) dataObject.get("data");
+                            Log.d("data here", String.valueOf(imei_check.productAllDetails));
+
+
+                            Log.d("data present", String.valueOf(imei_check.productAllDetails));
                             Toast.makeText(getApplicationContext(), "Form Already Present ", Toast.LENGTH_SHORT).show();
 
 
@@ -149,6 +152,7 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
 
                         {
                             imei_check.isProductPresent = false;
+                            Log.d("data here", String.valueOf(imei_check.productAllDetails));
                             Log.d("going", "tonew form");
                             Toast.makeText(getApplicationContext(), "Form Not Present", Toast.LENGTH_SHORT).show();
 
