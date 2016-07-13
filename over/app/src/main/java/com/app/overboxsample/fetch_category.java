@@ -114,20 +114,24 @@ public class fetch_category extends AppCompatActivity {
                     if (set_data.equals("date")) {
                         set_data = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                         edt.setText(set_data);
-                    } else if (main_key.equals("imei")) {
+                    }
+                    else if (main_key.equals("imei")) {
                         //Log.d("Tag","Going_to_imei");
 
                         set_data = (String) (imei_check.productOnUpload).get("imei");
                         edt.setText(set_data);
 
-                    } else if (main_key.equals("Model_Number")) {
+                    }
+                    else if (main_key.equals("Model_Number")) {
 
 
                         set_data = (String) (imei_check.productOnUpload).get("model_number");
                         edt.setText(set_data);
-                    } else if (set_data != null) {
+                    }
+                    else if (set_data != null) {
                         edt.setText(set_data);
-                    } else {
+                    }
+                    else {
 
                     }
                     map.put(id, "text");
@@ -242,11 +246,11 @@ public class fetch_category extends AppCompatActivity {
 
                             JSONObject obj = null;
                             obj = new JSONObject(main_value);
-                            String ap = "";
-                            ap = obj.getString("set");
+                            String url = "";
+                            url = obj.getString("set");
 
 
-                            appProvider.fetchval(ap, new IViewCallback<String>()
+                            appProvider.fetchval(url, new IViewCallback<String>()
 
                             {
                                 @Override
@@ -268,6 +272,8 @@ public class fetch_category extends AppCompatActivity {
 //
                                         JSONObject jb = null;
                                         lt = new ArrayList();
+
+
                                         for (int j = 0; j < a.length(); j++) {
                                             jb = (JSONObject) a.getJSONObject(j);
                                             lt.add(String.valueOf(jb.get("name")));
@@ -303,6 +309,7 @@ public class fetch_category extends AppCompatActivity {
                             });
 
                         } catch (JSONException e) {
+
                             e.printStackTrace();
                         }
 
@@ -347,10 +354,10 @@ public class fetch_category extends AppCompatActivity {
 
                 JSONObject dataReadyForSubmit =  Form_Submit();
                 //Log.d("Json Final Submit", String.valueOf(dataReadyForSubmit));
-                if(dataReadyForSubmit!=null)
-                submitData(dataReadyForSubmit);
-                else
-                    Log.d("Json Final Submit", "null");
+//                if(dataReadyForSubmit!=null)
+//               // submitData(dataReadyForSubmit);
+//                else
+//                    Log.d("Json Final Submit", "null");
 
 
             }
@@ -360,8 +367,12 @@ public class fetch_category extends AppCompatActivity {
 
 
     public JSONObject Form_Submit() {
+
+
         Log.d("Tag_map", String.valueOf(map));
         Log.d("Tag_map_key", String.valueOf(map_key));
+
+
         for (int key : map.keySet()) {
 
             if ((map.get(key)).equals("radio")) {
@@ -429,22 +440,24 @@ public class fetch_category extends AppCompatActivity {
                 }
 
 
-                try {
                     String S = "";
-                    AutoCompleteTextView auto = (AutoCompleteTextView) findViewById(key);
+                    AutoCompleteTextView auto = (AutoCompleteTextView) findViewById(d);
                     S = auto.getText().toString();
 
-                    Log.d("Auto again1",S);
+                    Log.d("Auto_again1",S);
                     if (S.trim().length() == 0) {
 
-                        TextView tw = (TextView) findViewById((key-1));
+                        TextView tw = (TextView) findViewById((d-1));
                         tw.setTextColor(Color.parseColor("#ff0000"));
+                        json_var=1;
 
                     } else {
-                        TextView tw = (TextView) findViewById((key-1));
+                        TextView tw = (TextView) findViewById((d-1));
                         tw.setTextColor(Color.parseColor("#000000"));
+                        Log.d("Auto_again_key",tw.getText().toString());
+                        Log.d("Auto_again_value", S);
                         try {
-                            Log.d("Auto again2",tw.getText().toString());
+
                             UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
@@ -452,13 +465,13 @@ public class fetch_category extends AppCompatActivity {
                     }
                     // Log.d("Autocomplete", s_1);
 
-                } catch (Exception e) {
-                     Log.d("Error_auto_complete","error");
-                    TextView tw = (TextView) findViewById((key - 1));
-                    tw.setTextColor(Color.parseColor("#ff0000"));
-                    json_var = 1;
-
-                }
+//                } catch (Exception e) {
+//                     Log.d("Error_auto_complete","error");
+//                    TextView tw = (TextView) findViewById((key - 1));
+//                    tw.setTextColor(Color.parseColor("#ff0000"));
+//                    json_var = 1;
+//
+//                }
              }
 //                else if ((map.get(key)).equals("date"))
 //                {
@@ -492,8 +505,6 @@ public class fetch_category extends AppCompatActivity {
 
     public void submitData(JSONObject dataReadyFoSubmit)
     {
-
-
 
         try {
 
