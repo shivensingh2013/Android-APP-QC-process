@@ -1,24 +1,18 @@
 package com.app.overboxsample;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar.LayoutParams;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -36,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -46,13 +39,13 @@ public class fetch_category extends AppCompatActivity {
     public static List lt;
 
     JSONObject UploadQCData=new JSONObject();
-
+    String main_key;
     int id = 0;
     int json_var = 0;
     int auto_var = 0;   //used to map TextView with AutoTextComplete
-
+    JSONObject Value1;
     AutoCompleteTextView auto;
-
+    String type;
     LinearLayout lm;
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
@@ -76,276 +69,281 @@ public class fetch_category extends AppCompatActivity {
         List values =  imei_check.formDisplayingObject[0];
         List keys =  imei_check.formDisplayingObject[1];
 
-        Log.d("print keys",String.valueOf(keys));
-
-
-        // Creating a new RelativeLayout
-//        ScrollView scrollView = new ScrollView(this);
-
 
         lm = (LinearLayout) findViewById(R.id.linearMain);
 
         for(int i=0;i<keys.size();i++)
         {
-            String s = (String) keys.get(i);
-            String value  = (String) values.get(i);
-            map_key.put(id, s);
+             main_key = (String) keys.get(i);    //get key value
+             String main_value  = (String) values.get(i);    //get array value to be read
 
-            //create a dynamic layout
+            try {
+                 Value1 = new JSONObject(main_value);
+                  type = Value1.getString("type");
+                 }
+            catch (JSONException e) {
+                e.printStackTrace();
+                 }
+
+
+
+
 
             final LinearLayout ll = new LinearLayout(this);
+
             TextView product = new TextView(this);
             product.setId(id);
-            product.setText(s+"");
+            product.setText(main_key+"");
             product.setTextSize(20);
             product.setPadding(0, 10, 0, 10);
             product.setTextColor(Color.parseColor("#0e6655"));
-           // product.setPadding(40,10,40,10);
 
-
-          //  product.setTextColor(65281);
             product.setGravity(View.TEXT_ALIGNMENT_CENTER);
             lm.addView(product);
 
-            if(value.contains("autocomplete"))
-            {
-//                Log.d("AUTO TEXT ID", String.valueOf(id));
-//                Log.d("AUTO TEXT",s);
-                map_autocomplete.add(id);
-            }
 
+
+            map_key.put(id, main_key);     //add key value to map
             id = id+1;
 
-            if(value.equals("flag"))
+
+            if((type.contains("autocomplete")))
             {
-               //enter
-                map.put(id,value);
-                final  RadioButton[] rb = new RadioButton[2];
-                RadioGroup rg = new RadioGroup(this); //create the RadioGroup
-
-                //allradio.add(rg);
-                rg.setId(id);
-                id =id+ 1;
-                //allradio.add(rg);
-//                rg.setId(radio_p);
-//                radio_p = radio_p +1;
-                rg.setOrientation(RadioGroup.VERTICAL);
-                rb[0]  = new RadioButton(this);
-                rb[0].setId(id);
-                id = id+1;
-                rb[1]  = new RadioButton(this);
-                rb[1].setId(id);
-                id = id+1;
-                rg.addView(rb[0]); //the RadioButtons are added to the radioGroup instead of the layout
-
-                rb[0].setText("complete");
-                rg.addView(rb[1]);
-                rb[1].setText("incomplete");
-                if(rg.getParent()!=null)
-                    ((LinearLayout)rg.getParent()).removeView(rg);
-                rg.setPadding(40, 10, 40, 10);
-                rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                lm.addView(rg);
+                map_autocomplete.add(id);
+           //     id = id+1;
 
             }
 
-            else if(value.equals("text"))
-            {
-                map.put(id,value);
+
+            if(type.equals("text")) {
+                String set_data="";
+
                 EditText edt = new EditText(this);
+                try {
+                    set_data = Value1.getString("set");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (set_data.equals("date")) {
+                     set_data = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                    edt.setText(set_data);
+                }
+
+
+                else if(main_key.equals("imei"))
+                {
+                    Log.d("Tag","Going_to_imei");
+                    try {
+                        set_data = (String) (imei_check.productOnUpload).get("imei");
+                        Log.d("Tag_Imei", String.valueOf(imei_check.productOnUpload));
+                        edt.setText(set_data);
+                    } catch (JSONException e) {
+                        Log.d("Error","Error");
+                        e.printStackTrace();
+                    }
+                }
+
+                else if(main_key.equals("Model_Number"))
+                {
+
+                    try {
+                        set_data = (String) (imei_check.productOnUpload).get("model_number");
+                        edt.setText(set_data);
+                        }
+                    catch (JSONException e) {
+                        Log.d("Error","Error");
+                        e.printStackTrace();
+                    }
+                }
+                else if(set_data !=null)
+                {
+                    edt.setText(set_data);
+                }
+                map.put(id, "text");
                 edt.setId(id);
                 id =id+ 1;
-//                edt.getBackgroundTintMode();
+//
                 edt.setPadding(40, 10, 40, 10);
                 edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
-//                allEds.add(edt);
-//                edt.setId(ed_p);
-//                ed_p = ed_p +1;
+//
                 lm.addView(edt);
             }
-            else if(value.equals("date"))
-            {
-                map.put(id,value);
-                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//
+            //if radio in value we have to make it a obje ArrayList<String> options = new ArrayList<String>();ct
 
-                id =id+ 1;
-                TextView date1 = new TextView(this);
-                date1.setText(date);
-                date1.setTextSize(20);
-                date1.setTextColor(Color.parseColor("#2980b9"));
-                date1.setPadding(40, 10, 40, 10);
-                date1.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                lm.addView(date1);
 
-            }
-            //if radio in value we have to make it a object
-            else if(value.contains("radio"))
-                {
-                    map.put(id,"radio");
+
+         else {
+                if (type.contains("dropdown")) {
+                    ArrayList<String> options = new ArrayList<String>();
+
+
+
+                   // Log.d("Tag_Dropdown","Dropdown");
+                    Spinner mSpinner = new Spinner(this);
+                    map.put(id, "dropdown");
+                    mSpinner.setId(id);
+                    id =id+1;
+
 
                     JSONObject jsonObj = null;
                     String r = null;
                     try {
-                         jsonObj = new JSONObject(value);
-                         r = jsonObj.getString("radio");
+                        jsonObj = new JSONObject(main_value);
+                        r = jsonObj.getString("set");
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                     JSONArray array = null;
                     try {
-                         array = new JSONArray(r);
+                        array = new JSONArray(r);
+                        Log.d("Tag_dropdown", String.valueOf(array));
+                        for (int j = 0; j < array.length(); j++) {
+                            options.add((String) array.get(j));
+                                            }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,options);
+                    mSpinner.setAdapter(adapter);
+
+                    mSpinner.setPadding(40, 10, 40, 10);
+                    mSpinner.setBackgroundColor(Color.parseColor("#fbfcfc"));
+                    lm.addView(mSpinner);
+
+
+                } else if (type.contains("radio")) {
+
+
+                    JSONObject jsonObj = null;
+                    String r = null;
+                    try {
+                        jsonObj = new JSONObject(main_value);
+                        r = jsonObj.getString("set");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    JSONArray array = null;
+                    try {
+                        array = new JSONArray(r);
 
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
-                   final  RadioButton[] rb = new RadioButton[array.length()];
+                    final RadioButton[] rb = new RadioButton[array.length()];
                     RadioGroup rg = new RadioGroup(this); //create the RadioGroup
+                    map.put(id, "radio");  //add radio group to map
                     rg.setId(id);
-                    id =id+ 1;
+                    id = id + 1;
 //
                     rg.setOrientation(RadioGroup.VERTICAL);
 
 
-                   for(int j =0;j< array.length();j++ ) {
+                    for (int j = 0; j < array.length(); j++) {
 //
-                      try {
+                        try {
 //
-                           rb[j]  = new RadioButton(this);
-                          rb[j].setId(id);
-                          id = id+1;
-                           rg.addView(rb[j]); //the RadioButtons are added to the radioGroup instead of the layout
+                            rb[j] = new RadioButton(this);
+                            rb[j].setId(id);
+                            id = id + 1;
+                            rg.addView(rb[j]); //the RadioButtons are added to the radioGroup instead of the layout
 
-                          rb[j].setText(String.valueOf(array.get(j)) + "");
+                            rb[j].setText(String.valueOf(array.get(j)) + "");
 
-                       } catch (JSONException e) {
-                           e.printStackTrace();
-                       }
-                   if(rg.getParent()!=null)
-                       ((LinearLayout)rg.getParent()).removeView(rg);
-                       rg.setPadding(40, 10, 40, 10);
-                       rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        if (rg.getParent() != null)
+                            ((LinearLayout) rg.getParent()).removeView(rg);
+                        rg.setPadding(40, 10, 40, 10);
+                        rg.setBackgroundColor(Color.parseColor("#fbfcfc"));
 
-                       lm.addView(rg);
+                        lm.addView(rg);
 
-                   }
-                }
-
-            else if(value.contains("checkbox"))
-            {
-                map.put(id,"checkbox");
-                id =id+ 1;
-
-                JSONObject jsonObj = null;
-                String r = null;
-                try
-                {
-                    jsonObj = new JSONObject(value);
-                    r = jsonObj.getString("checkbox");
-                    jsonObj = new JSONObject(r);
-                    Iterator<String> it = jsonObj.keys();
-
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        CheckBox check = new CheckBox(this);
-//
-
-                        check.setPadding(40, 10, 40, 10);
-                        check.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                        lm.addView(check);
                     }
+                } else if (type.contains("autocomplete")) {
+                    try {
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    }
+                        JSONObject obj = null;
+                        obj = new JSONObject(main_value);
+                        String ap = "";
+                        ap = obj.getString("set");
 
 
-            }
+                        appProvider.fetchval(ap, new IViewCallback<String>()
 
-            else if(value.contains("autocomplete")) {
-                try{
+                        {
+                            @Override
+                            public void onSuccess(String dataObject) {
+                                JSONArray a = null;
 
-                    JSONObject obj = null;
-                    obj = new JSONObject(value);
-                    String ap = "";
-                    ap = obj.getString("url");
+                                try {
+                                    a = new JSONArray(dataObject);
+                                    //   List<String> start = new ArrayList<String>();
+                                    //we are creating a temporary spinner named variable .After adding this to the ll layout the name of spinner is forgoteten and so can be used again.
 
-//                    if (ap.contains("Brand"))
-//                        ap = ap + "?brand=";
-//                    else
-//                        ap = ap + "?color=";
+                                    auto = (AutoCompleteTextView) new AutoCompleteTextView(fetch_category.this);
 
-                    appProvider.fetchval(ap, new IViewCallback<String>()
+                                    map.put(id, "autocomplete");
+                                    auto.setId(id);
+                                    id = id + 1;
+//
+                                    JSONObject jb = null;
+                                    lt = new ArrayList();
+                                    for (int j = 0; j < a.length(); j++) {
+                                        jb = (JSONObject) a.getJSONObject(j);
+                                        lt.add(String.valueOf(jb.get("name")));
+                                        }
 
-                    {
-                        @Override
-                        public void onSuccess(String dataObject) {
-                            JSONArray a = null;
+                                    adapter1 = new ArrayAdapter<String>(fetch_category.this
+                                            , R.layout.support_simple_spinner_dropdown_item, lt);
+                                    adapter1.setDropDownViewResource
+                                            (android.R.layout.simple_spinner_dropdown_item);
 
-                            try {
-                                a = new JSONArray(dataObject);
-                                //   List<String> start = new ArrayList<String>();
-                                //we are creating a temporary spinner named variable .After adding this to the ll layout the name of spinner is forgoteten and so can be used again.
-                                map.put(id,"autocomplete");
-                                auto = (AutoCompleteTextView) new AutoCompleteTextView(fetch_category.this);
-                                auto.setId(id);
-                                id = id+1;
-                                JSONObject jb = null;
-                                lt = new ArrayList();
-                                for (int j = 0; j < a.length(); j++) {
-                                    jb = (JSONObject) a.getJSONObject(j);
-                                    lt.add(String.valueOf(jb.get("name")));
+                                    auto.setAdapter(adapter1);
+                                    auto.setThreshold(1);
+                                    auto.setDropDownWidth(500);
+                                    if (auto.getParent() != null)
+                                        ((LinearLayout) auto.getParent()).removeView(auto);
+                                    auto.setPadding(40, 10, 40, 10);
+                                    auto.setBackgroundColor(Color.parseColor("#fbfcfc"));
+                                    auto.setWidth(lm.getWidth());
+
+                                    ll.addView(auto);
+                                } catch (JSONException e) {
 
                                 }
 
-                                adapter1 = new ArrayAdapter<String>(fetch_category.this
-                                        , R.layout.support_simple_spinner_dropdown_item, lt);
-                                adapter1.setDropDownViewResource
-                                        (android.R.layout.simple_spinner_dropdown_item);
-
-                                auto.setAdapter(adapter1);
-                                auto.setThreshold(1);
-                                auto.setDropDownWidth(500);
-                                if (auto.getParent() != null)
-                                    ((LinearLayout) auto.getParent()).removeView(auto);
-                                auto.setPadding(40,10,40,10);
-                                auto.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                                auto.setWidth(lm.getWidth());
-
-                                ll.addView(auto);
-                            } catch (JSONException e) {
-
                             }
 
-                        }
-                        @Override
-                        public void onError(String errorMessage, int errorCode, @Nullable String dataObject) {
-                            Log.d("no brand jsonobj", "jason");
+                            @Override
+                            public void onError(String errorMessage, int errorCode, @Nullable String dataObject) {
+                                Log.d("no brand jsonobj", "jason");
 
 
-                        }
-                    });
+                            }
+                        });
 
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                catch (JSONException e) {
-                    e.printStackTrace();
+
+                } else {
+                    EditText edt = new EditText(this);
+
+                    edt.setSingleLine();
+                    edt.setPadding(40, 10, 40, 10);
+                    edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
+                    map.put(id, "text");
+                    edt.setId(id);
+                    id = id + 1;
+                    lm.addView(edt);
+
                 }
-
             }
-                    else
-                    {
-                        EditText edt = new EditText(this);
-
-                        edt.setSingleLine();
-                        edt.setPadding(40, 10, 40, 10);
-                        edt.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                        map.put(id, "text");
-                        edt.setId(id);
-                        id =id+ 1;
-                        lm.addView(edt);
-
-                    }
                     lm.addView(ll);
                 }
 
@@ -381,22 +379,20 @@ public class fetch_category extends AppCompatActivity {
 
 
     public JSONObject Form_Submit() {
+//         Log.d("Tag_map_key", String.valueOf(map));
 
         for (int key : map.keySet()) {
 
-//
             if ((map.get(key)).equals("radio")) {
 
 
                 RadioGroup radioButtonGroup = (RadioGroup) findViewById(key);
-                //     radioButtonGroup.setBackgroundResource(R.color.colorPrimary);
+
                 try {
                     int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
                     RadioButton rb = (RadioButton) findViewById(radioButtonID);
                     String S = rb.getText().toString();
 
-
-                    //  Log.d("Radio Text", S);
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#000000"));
                     try {
@@ -412,7 +408,8 @@ public class fetch_category extends AppCompatActivity {
 
                 }
 
-            } else if ((map.get(key)).equals("text")) {
+            }
+         if ((map.get(key)).equals("text")) {
                 EditText edittext = (EditText) findViewById(key);
                 try {
                     String S = edittext.getText().toString();
@@ -430,45 +427,47 @@ public class fetch_category extends AppCompatActivity {
 
                         }
                     }
-                    // Log.d("EditText", S);
+
 
                 } catch (Exception e) {
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#ff0000"));
                     json_var = 1;
 
-                }
-            } else if ((map.get(key)).equals("flag")) {
-                RadioGroup radioButtonGroup = (RadioGroup) findViewById(key);
-                try {
-                    int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
-                    RadioButton rb = (RadioButton) findViewById(radioButtonID);
-                    String S = rb.getText().toString();
-                    // Log.d("Radio Text", S);
-
-                    TextView tw = (TextView) findViewById((key - 1));
-                    tw.setTextColor(Color.parseColor("#000000"));
-                    try {
-                        UploadQCData.put((tw.getText().toString()), S);
-                    } catch (Exception e) {
-
-                    }
-
-                } catch (Exception e) {
-
-                    TextView tw = (TextView) findViewById((key - 1));
-                    tw.setTextColor(Color.parseColor("#ff0000"));
-                    json_var = 1;
                 }
             }
 
+//         else if ((map.get(key)).equals("flag")) {
+//                RadioGroup radioButtonGroup = (RadioGroup) findViewById(key);
+//                try {
+//                    int radioButtonID = radioButtonGroup.getCheckedRadioButtonId();
+//                    RadioButton rb = (RadioButton) findViewById(radioButtonID);
+//                    String S = rb.getText().toString();
+//                    // Log.d("Radio Text", S);
+//
+//                    TextView tw = (TextView) findViewById((key - 1));
+//                    tw.setTextColor(Color.parseColor("#000000"));
+//                    try {
+//                        UploadQCData.put((tw.getText().toString()), S);
+//                    } catch (Exception e) {
+//
+//                    }
+//
+//                } catch (Exception e) {
+//
+//                    TextView tw = (TextView) findViewById((key - 1));
+//                    tw.setTextColor(Color.parseColor("#ff0000"));
+//                    json_var = 1;
+//                }
+//            }
+
 //
 
-            else if ((map.get(key)).equals("autocomplete"))
+           else if ((map.get(key)).equals("autocomplete"))
             {
 
                 int d = (int) map_autocomplete.get(auto_var);
-                //  Log.d("AUTO TEXT AGAIN", String.valueOf(d));
+                Log.d("AUTO TEXT AGAIN", String.valueOf(d));
                 auto_var = auto_var + 1;
                 if (map_autocomplete.size() == (auto_var)) {
                     auto_var = 0;
@@ -498,26 +497,25 @@ public class fetch_category extends AppCompatActivity {
                     // Log.d("Autocomplete", s_1);
 
                 } catch (Exception e) {
-                    // Log.d("Error","error");
+                     Log.d("Error_auto_complete","error");
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#ff0000"));
                     json_var = 1;
 
                 }
-
-            }
-                else if ((map.get(key)).equals("date"))
-                {
-                    TextView tw = (TextView) findViewById((key - 1));
-                    tw.setTextColor(Color.parseColor("#000000"));
-                    String S = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                    try {
-                        UploadQCData.put((tw.getText().toString()), S);
-                    } catch (Exception e) {
-
-                    }
-                }
-
+             }
+//                else if ((map.get(key)).equals("date"))
+//                {
+//                    TextView tw = (TextView) findViewById((key - 1));
+//                    tw.setTextColor(Color.parseColor("#000000"));
+//                    String S = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+//                    try {
+//                        UploadQCData.put((tw.getText().toString()), S);
+//                    } catch (Exception e) {
+//
+//                    }
+//                }
+//
 
 
         }

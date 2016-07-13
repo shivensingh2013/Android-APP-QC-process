@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -142,7 +141,7 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
                             imei_check.isProductPresent = true;
                             JSONArray buf = (JSONArray) dataObject.get("data");
                             imei_check.productAllDetails = (JSONObject) buf.get(0);
-//                        Log.d("data present", String.valueOf(imei_check.productAllDetails));
+                        Log.d("data present", String.valueOf(imei_check.productAllDetails));
                             Toast.makeText(getApplicationContext(), "Form Already Present ", Toast.LENGTH_SHORT).show();
 
 

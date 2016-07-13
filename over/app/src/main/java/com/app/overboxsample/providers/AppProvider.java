@@ -1,20 +1,13 @@
 package com.app.overboxsample.providers;
 
-import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.text.Editable;
 import android.util.Log;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.app.overboxsample.imei_check;
-import com.app.overboxsample.product_summary;
 import com.app.overboxsample.network.RequestFactory;
 import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.network.request.Payload;
@@ -96,7 +89,8 @@ public class AppProvider extends BaseProvider {
 
                 }
             }
-        }, new Response.ErrorListener() {
+        }
+        , new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
@@ -193,41 +187,41 @@ public class AppProvider extends BaseProvider {
         String imeiInput=String.valueOf(edt.getText());
 
 
-        try {
-            json.put("imei",imeiInput);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        Log.d("fetch_imei", String.valueOf(json));
-        String URL="http://dev.api.overboxd.com/api/marketplace/imei";
-       //RequestQueue rq= Volley.newRequestQueue();
+        Payload payload = new Payload();
+        payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
+//        payload.add("command", "fetch_object");
+//        payload.add("category_id", categoryId);
 
-        JsonObjectRequest req = new JsonObjectRequest
-                (com.android.volley.Request.Method.POST,URL,json,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        HttpResponse<JSONObject> httpResponse = new HttpResponse<>(new HttpResponseStatus(),response);
-                        notifyResponse(httpResponse, call);
-                        Log.d("imei show ","here");
-                        //VolleyLog.v("Response:%n %s", response.toString(4));
-                    }
-                }, new Response.ErrorListener() {
+
+
+        Log.d("nitify1", "it");
+
+        Request request = RequestFactory.createRequest(
+//             HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi"+categoryId, null, payload, null, 60000, null, null);
+                HttpMethod.POST, "http://dev.api.overboxd.com/api/marketplace/generalqcapi/" + imei_check.categoryId+"/"+imeiInput, null, payload, null, 60000, null, null);
+        VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>()
+        {
+            @Override
+            public void onResponse(String response) {
+                HttpResponse<JSONObject> httpResponse = null;
+                try {
+                    httpResponse = new HttpResponse<>(
+                            new HttpResponseStatus(),
+                            new JSONObject(response)
+                    );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                notifyResponse(httpResponse, call);
+            }
+        },new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
 
-                Log.d("Error","no response from volley");
-
-                VolleyLog.e("Error: ", error.getMessage());
-
-
-
             }
-        });
-
-        VolleyQueueUtils.getGeneralRequestQueue().add(req);
-
+        }));
 
 
     }

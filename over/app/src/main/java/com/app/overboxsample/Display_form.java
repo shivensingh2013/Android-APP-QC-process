@@ -1,28 +1,20 @@
 package com.app.overboxsample;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar.LayoutParams;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -264,41 +255,41 @@ public class Display_form extends AppCompatActivity {
 
                 }
 
-                Log.d("Radio array", String.valueOf(array));
-                Log.d("compare value",value1);
-                Log.d("End", "################");
+//                Log.d("Radio array", String.valueOf(array));
+//                Log.d("compare value",value1);
+//                Log.d("End", "################");
             }
 
-            else if(value.contains("checkbox"))
-            {
-                map.put(id,"checkbox");
-                id =id+ 1;
-
-                JSONObject jsonObj = null;
-                String r = null;
-                try
-                {
-                    jsonObj = new JSONObject(value);
-                    r = jsonObj.getString("checkbox");
-                    jsonObj = new JSONObject(r);
-                    Iterator<String> it = jsonObj.keys();
-
-                    while (it.hasNext()) {
-                        String key = it.next();
-                        CheckBox check = new CheckBox(this);
+//            else if(value.contains("checkbox"))
+//            {
+//                map.put(id,"checkbox");
+//                id =id+ 1;
 //
-
-                        check.setPadding(40, 10, 40, 10);
-                        check.setBackgroundColor(Color.parseColor("#fbfcfc"));
-                        lm.addView(check);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
+//                JSONObject jsonObj = null;
+//                String r = null;
+//                try
+//                {
+//                    jsonObj = new JSONObject(value);
+//                    r = jsonObj.getString("checkbox");
+//                    jsonObj = new JSONObject(r);
+//                    Iterator<String> it = jsonObj.keys();
+//
+//                    while (it.hasNext()) {
+//                        String key = it.next();
+//                        CheckBox check = new CheckBox(this);
+////
+//
+//                        check.setPadding(40, 10, 40, 10);
+//                        check.setBackgroundColor(Color.parseColor("#fbfcfc"));
+//                        lm.addView(check);
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//
+//            }
 
             else if(value.contains("autocomplete")) {
 
