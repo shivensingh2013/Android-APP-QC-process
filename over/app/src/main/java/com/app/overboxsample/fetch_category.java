@@ -151,8 +151,6 @@ public class fetch_category extends AppCompatActivity {
                 {
                         ArrayList<String> options = new ArrayList<String>();
 
-
-                        // Log.d("Tag_Dropdown","Dropdown");
                         Spinner mSpinner = new Spinner(this);
                         map.put(id, "dropdown");
                         mSpinner.setId(id);
@@ -170,7 +168,7 @@ public class fetch_category extends AppCompatActivity {
                         JSONArray array = null;
                         try {
                             array = new JSONArray(r);
-                            //Log.d("Tag_dropdown", String.valueOf(array));
+
                             for (int j = 0; j < array.length(); j++) {
                                 options.add((String) array.get(j));
                             }
@@ -353,11 +351,11 @@ public class fetch_category extends AppCompatActivity {
                 json_var =0;
 
                 JSONObject dataReadyForSubmit =  Form_Submit();
-                //Log.d("Json Final Submit", String.valueOf(dataReadyForSubmit));
-//                if(dataReadyForSubmit!=null)
-//               // submitData(dataReadyForSubmit);
-//                else
-//                    Log.d("Json Final Submit", "null");
+                Log.d("Json Final Submit", String.valueOf(dataReadyForSubmit));
+                if(dataReadyForSubmit!=null)
+                submitData(dataReadyForSubmit);
+                else
+                    Log.d("Json Final Submit", "null");
 
 
             }
@@ -444,7 +442,6 @@ public class fetch_category extends AppCompatActivity {
                     AutoCompleteTextView auto = (AutoCompleteTextView) findViewById(d);
                     S = auto.getText().toString();
 
-                    Log.d("Auto_again1",S);
                     if (S.trim().length() == 0) {
 
                         TextView tw = (TextView) findViewById((d-1));
@@ -452,43 +449,52 @@ public class fetch_category extends AppCompatActivity {
                         json_var=1;
 
                     } else {
-                        TextView tw = (TextView) findViewById((d-1));
+                        TextView tw = (TextView) findViewById((d - 1));
                         tw.setTextColor(Color.parseColor("#000000"));
-                        Log.d("Auto_again_key",tw.getText().toString());
-                        Log.d("Auto_again_value", S);
+
                         try {
 
                             UploadQCData.put((tw.getText().toString()), S);
                         } catch (Exception e) {
 
                         }
+
+
                     }
-                    // Log.d("Autocomplete", s_1);
+            }
 
-//                } catch (Exception e) {
-//                     Log.d("Error_auto_complete","error");
-//                    TextView tw = (TextView) findViewById((key - 1));
-//                    tw.setTextColor(Color.parseColor("#ff0000"));
-//                    json_var = 1;
-//
-//                }
-             }
-//                else if ((map.get(key)).equals("date"))
-//                {
-//                    TextView tw = (TextView) findViewById((key - 1));
-//                    tw.setTextColor(Color.parseColor("#000000"));
-//                    String S = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//                    try {
-//                        UploadQCData.put((tw.getText().toString()), S);
-//                    } catch (Exception e) {
-//
-//                    }
-//                }
-//
+            else if ((map.get(key)).equals("dropdown")) {
+                Spinner mSpinner = (Spinner) findViewById(key);
 
+             try {
+                    String S = mSpinner.getSelectedItem().toString();
+                    if (S.trim().length() == 0) {
+                        TextView tw = (TextView) findViewById((key - 1));
+                        tw.setTextColor(Color.parseColor("#ff0000"));
+                        json_var = 1;
+
+                       }
+                    else {
+                        TextView tw = (TextView) findViewById((key - 1));
+                        tw.setTextColor(Color.parseColor("#000000"));
+                        try {
+                            UploadQCData.put((tw.getText().toString()), S);
+                            }
+                        catch (Exception e) {
+                           }
+                    }
+
+                }
+                catch (Exception e) {
+                    TextView tw = (TextView) findViewById((key - 1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var = 1;
+
+                }
+            }
 
         }
-        //
+
             if (UploadQCData.length()!=0&&json_var!=1)
             {
             Log.d("Json Result", String.valueOf(UploadQCData));

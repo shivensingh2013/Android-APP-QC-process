@@ -41,6 +41,7 @@ public class Display_form extends AppCompatActivity {
     JSONObject UploadQCData=new JSONObject();
     String main_key;
     int id = 0;
+    int auto_variable =0;
     int json_var = 0;
     int auto_var = 0;   //used to map TextView with AutoTextComplete
     JSONObject Value1;
@@ -50,6 +51,7 @@ public class Display_form extends AppCompatActivity {
 
     HashMap<Integer,String> map = new HashMap<Integer,String>();
     HashMap<Integer,String> map_key = new HashMap<Integer,String>();
+
     ArrayList map_autocomplete = new ArrayList();
 
     AppProvider appProvider;
@@ -107,10 +109,9 @@ public class Display_form extends AppCompatActivity {
             id = id+1;
 
 
-            if((type.contains("autocomplete")))
-            {
+            if ((type.contains("autocomplete"))) {
                 map_autocomplete.add(id);
-                //     id = id+1;
+                id = id + 1;
 
             }
 
@@ -277,9 +278,10 @@ public class Display_form extends AppCompatActivity {
 
                                     auto = (AutoCompleteTextView) new AutoCompleteTextView(Display_form.this);
 
-                                    map.put(id, "autocomplete");
-                                    auto.setId(id);
-                                    id = id + 1;
+                                    int r = (int) map_autocomplete.get(auto_variable);
+                                    auto.setId(r);
+                                    map.put(r, "autocomplete");
+                                    auto_variable = auto_variable + 1;
 //
                                     JSONObject jb = null;
                                     lt = new ArrayList();
@@ -430,14 +432,6 @@ public class Display_form extends AppCompatActivity {
             else if ((map.get(key)).equals("autocomplete"))
             {
 
-                int d = (int) map_autocomplete.get(auto_var);
-                Log.d("AUTO TEXT AGAIN", String.valueOf(d));
-                auto_var = auto_var + 1;
-                if (map_autocomplete.size() == (auto_var)) {
-                    auto_var = 0;
-                }
-
-
                 try {
                     String S = "";
                     AutoCompleteTextView auto = (AutoCompleteTextView) findViewById(key);
@@ -446,11 +440,12 @@ public class Display_form extends AppCompatActivity {
 
                     if (S.trim().length() == 0) {
 
-                        TextView tw = (TextView) findViewById((d));
+                        TextView tw = (TextView) findViewById((key-1));
                         tw.setTextColor(Color.parseColor("#ff0000"));
+                        json_var =1;
 
                     } else {
-                        TextView tw = (TextView) findViewById((d));
+                        TextView tw = (TextView) findViewById((key-1));
                         tw.setTextColor(Color.parseColor("#000000"));
                         try {
                             UploadQCData.put((tw.getText().toString()), S);
@@ -458,29 +453,43 @@ public class Display_form extends AppCompatActivity {
 
                         }
                     }
-                    // Log.d("Autocomplete", s_1);
+
 
                 } catch (Exception e) {
-                    Log.d("Error_auto_complete","error");
+
                     TextView tw = (TextView) findViewById((key - 1));
                     tw.setTextColor(Color.parseColor("#ff0000"));
                     json_var = 1;
 
                 }
             }
-//                else if ((map.get(key)).equals("date"))
-//                {
-//                    TextView tw = (TextView) findViewById((key - 1));
-//                    tw.setTextColor(Color.parseColor("#000000"));
-//                    String S = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-//                    try {
-//                        UploadQCData.put((tw.getText().toString()), S);
-//                    } catch (Exception e) {
-//
-//                    }
-//                }
-//
+            else if ((map.get(key)).equals("dropdown")) {
+                Spinner mSpinner = (Spinner) findViewById(key);
+                try {
+                    String S = mSpinner.getSelectedItem().toString();
+                    if (S.trim().length() == 0) {
+                        TextView tw = (TextView) findViewById((key - 1));
+                        tw.setTextColor(Color.parseColor("#ff0000"));
+                        json_var = 1;
 
+                    } else {
+                        TextView tw = (TextView) findViewById((key - 1));
+                        tw.setTextColor(Color.parseColor("#000000"));
+                        try {
+                            UploadQCData.put((tw.getText().toString()), S);
+                        }
+                        catch (Exception e) {
+                        }
+                    }
+
+                }
+                catch (Exception e) {
+                    TextView tw = (TextView) findViewById((key - 1));
+                    tw.setTextColor(Color.parseColor("#ff0000"));
+                    json_var = 1;
+
+                }
+            }
 
         }
         //

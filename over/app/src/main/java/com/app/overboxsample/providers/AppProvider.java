@@ -116,8 +116,7 @@ public class AppProvider extends BaseProvider {
 
         Payload payload = new Payload();
         payload.add("key", "ajkT14Asdfe526fasdfJKCckecsdps");
-//        payload.add("command", "fetch_object");
-//        payload.add("category_id", categoryId);
+
 
 
 
