@@ -513,6 +513,7 @@ public class Display_form extends AppCompatActivity {
 
 
         try {
+            final String sqq=UploadQCData.getString("qc_status");
 
             appProvider.submitData(dataReadyFoSubmit,new IViewCallback<JSONObject>()
             {
@@ -520,8 +521,15 @@ public class Display_form extends AppCompatActivity {
                 public void onSuccess(JSONObject dataObject) {
                     Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
                     Log.d("Submit", String.valueOf(dataObject));
-                    UpdateLStatus("Under ME");
 
+                    if(sqq.equals("BER"))
+                    {
+                        Log.d("seeling oofline","haha");
+                        UpdateLStatus("Sell Offline");
+                    }
+                    else {
+                        UpdateLStatus("Under ME");
+                    }
 
                 }
 

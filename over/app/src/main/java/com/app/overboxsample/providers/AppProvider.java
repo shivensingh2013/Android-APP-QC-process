@@ -66,6 +66,46 @@ public class AppProvider extends BaseProvider {
 }
 
 
+
+
+
+    public void fetchdate(String url,final IViewCallback<String> call)
+    {
+        Payload payload = new Payload();
+        Request request = RequestFactory.createRequest(
+                HttpMethod.POST, url,null, payload, null, 60000, null, null);
+
+        VolleyQueueUtils.getGeneralRequestQueue().add(new VolleyStringRequest(request, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+
+                    HttpResponse<String> httpResponse = new HttpResponse<>(
+                            new HttpResponseStatus(),
+                            response
+                    );
+
+                    notifyResponse(httpResponse, call);
+
+                } catch (Exception e) {
+
+                }
+            }
+        }
+                , new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }));
+
+
+    }
+
+
+
+
+
     //managing request for fetching Brand and colour
     public void fetchval(String url,final IViewCallback<String> call)
     {
@@ -120,7 +160,7 @@ public class AppProvider extends BaseProvider {
 
 
 
-        Log.d("nitify1", "it");
+//        Log.d("nitify1", "it");
 
         Request request = RequestFactory.createRequest(
 //             HttpMethod.POST, "http://stage.overboxd.com/index.php/generalqcapi"+categoryId, null, payload, null, 60000, null, null);

@@ -1,26 +1,18 @@
 package com.app.overboxsample;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.providers.AppProvider;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.Iterator;
 
@@ -49,14 +41,15 @@ public class QC_Report extends AppCompatActivity implements View.OnClickListener
                 String key = it.next();
 
                 c1.setText(key);
-                c1.setTextSize(20);
+                c1.setTextSize(18);
+                c1.setTextColor(Color.parseColor("#357ed5"));
 
                 TextView cp=new TextView(this);
                 cp.setText("  ");
 
                 TextView c2 = new TextView(this);
                 c2.setText(imei_check.productAllDetails.getJSONObject(key).getString("value"));
-                c2.setTextSize(20);
+                c2.setTextSize(18);
                 tr.addView(c1);
                 tr.addView(c2);
 

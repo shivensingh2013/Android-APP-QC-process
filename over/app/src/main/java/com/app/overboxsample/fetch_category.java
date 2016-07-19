@@ -72,6 +72,9 @@ public class fetch_category extends AppCompatActivity {
             List keys = imei_check.formDisplayingObject[1];
 
 
+
+              Toast.makeText(getApplicationContext(),"New Form",Toast.LENGTH_LONG).show();
+
             lm = (LinearLayout) findViewById(R.id.linearMain);
 
             for (int i = 0; i < keys.size(); i++) {
@@ -112,6 +115,27 @@ public class fetch_category extends AppCompatActivity {
                     set_data = Value1.getString("set");
 
                     if (set_data.equals("date")) {
+
+//                        String url = "";
+//                        appProvider.fetchval(url, new IViewCallback<String>()
+//
+//                        {
+//                            @Override
+//                            public void onSuccess(String dataObject) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(String errorMessage, int errorCode, @Nullable String dataObject) {
+//                                //      Log.d("no brand jsonobj", "jason");
+//
+//
+//                            }
+//                        });
+
+
+
+
                         set_data = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
                         edt.setText(set_data);
                     }
@@ -126,6 +150,14 @@ public class fetch_category extends AppCompatActivity {
 
 
                         set_data = (String) (imei_check.productOnUpload).get("model_number");
+                        edt.setText(set_data);
+                    }
+
+
+                    else if (main_key.equals("Brand")) {
+
+
+                        set_data = (String) (imei_check.productOnUpload).get("brands");
                         edt.setText(set_data);
                     }
                     else if (set_data != null) {
@@ -513,6 +545,7 @@ public class fetch_category extends AppCompatActivity {
     {
 
         try {
+          final String s=UploadQCData.getString("qc_status");
 
             appProvider.submitData(dataReadyFoSubmit,new IViewCallback<JSONObject>()
             {
@@ -520,15 +553,22 @@ public class fetch_category extends AppCompatActivity {
                 public void onSuccess(JSONObject dataObject) {
                     Toast.makeText(getApplicationContext(),"Data Saved",Toast.LENGTH_SHORT).show();
                     Log.d("Submit", String.valueOf(dataObject));
-                    UpdateLStatus("Under ME");
 
+                    if(s.equals("BER"))
+                    {
+                        Log.d("seeling oofline","haha");
+                        UpdateLStatus("Sell Offline");
+                    }
+                    else {
+                        UpdateLStatus("Under ME");
+                    }
 
                 }
 
                 @Override
                 public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
 
-                    Log.d("Submit","error in submissionat fetchcategory ");
+                    Log.d("Submit", "error in submissionat fetchcategory ");
 
 
                 }

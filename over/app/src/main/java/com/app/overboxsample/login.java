@@ -1,29 +1,24 @@
 package com.app.overboxsample;
 
+
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
-
 import com.app.overboxsample.network.interfaces.IViewCallback;
 import com.app.overboxsample.providers.AppProvider;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.List;
 
-/**
- * Created by shivendra on 5/23/2016.
- */
+
 
 public class login extends AppCompatActivity implements View.OnClickListener{
 
@@ -33,11 +28,15 @@ public class login extends AppCompatActivity implements View.OnClickListener{
     AppProvider appProvider;
     EditText id;
     EditText id_pass;
+    SharedPreferences sharedpreferences;
     ImageView image;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String Name = "nameKey";
+    public static final String Password = "passwordkey";
+    SharedPreferences.Editor editor;
 
 
-
-@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -47,7 +46,16 @@ public class login extends AppCompatActivity implements View.OnClickListener{
         id=(EditText) findViewById(R.id.editText);
         id_pass=(EditText) findViewById(R.id.editText2);
         appProvider = new AppProvider();
-    }
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        editor = sharedpreferences.edit();
+        String userName = sharedpreferences.getString(Name, "");
+        String userPass = sharedpreferences.getString(Password, "");
+        if(userName!=null) {
+            id.setText(userName);
+            id_pass.setText(userPass);
+        }
+}
 
 
 
@@ -65,8 +73,6 @@ public class login extends AppCompatActivity implements View.OnClickListener{
 
 
     @Override
-
-
     public void onClick(View view)
     {
 
@@ -81,14 +87,25 @@ public class login extends AppCompatActivity implements View.OnClickListener{
     public void Login()
         {
             if (id != null) {
+
                 id1= String.valueOf(id.getText());
 
             }
             if(id_pass!=null)
             {
+
+
                 id2=String.valueOf(id_pass.getText());
             }
 
+
+
+            if(id!=null && id_pass !=null)
+            {
+                editor.putString(Name, id1);
+                editor.putString(Password, id2);   //add to shared preference
+                editor.commit();    //commit in shared preference
+            }
             appProvider.loginc(id1,id2,new IViewCallback<JSONObject>()
             {
                 @Override
@@ -108,7 +125,7 @@ public class login extends AppCompatActivity implements View.OnClickListener{
                     {
 
 
-                        Intent i = new Intent(login.this, LauncherActivity.class);
+                        Intent i = new Intent(login.this, imei_check.class);
 
                         startActivity(i);
                     }
@@ -124,7 +141,7 @@ public class login extends AppCompatActivity implements View.OnClickListener{
                 @Override
                 public void onError(String errorMessage, int errorCode, @Nullable JSONObject dataObject) {
                     Log.d("onerror","jason");
-
+                    Toast.makeText(getApplicationContext(), "Username or password invalid", Toast.LENGTH_LONG);
 
                 }
 

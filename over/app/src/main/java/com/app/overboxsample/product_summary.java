@@ -7,6 +7,7 @@
 package com.app.overboxsample;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -70,6 +71,7 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
                     int resID = getResources().getIdentifier(id, "id", getPackageName());
                     TextView a = (TextView) findViewById(resID);
                     a.setText(key);
+                    a.setTextColor(Color.parseColor("#357ed5"));
 
 
                     c++;
@@ -152,6 +154,11 @@ public class product_summary extends AppCompatActivity implements View.OnClickLi
 
                         {
                             imei_check.isProductPresent = false;
+                            JSONArray a=(JSONArray)dataObject.get("data");
+                            imei_check.productAllDetails = (JSONObject)a.get(0);
+                            imei_check.productAllDetails=imei_check.productAllDetails.getJSONObject("object_result");
+
+
                             Log.d("data here", String.valueOf(imei_check.productAllDetails));
                             Log.d("going", "tonew form");
                             Toast.makeText(getApplicationContext(), "Form Not Present", Toast.LENGTH_SHORT).show();
