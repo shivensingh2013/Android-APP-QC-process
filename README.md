@@ -1,4 +1,4 @@
-# Quality Check process automation Android Application
+# Quality Check Automation android application
 
 __Author: Shivendra Singh \
 Build date: 20th November 2016__
